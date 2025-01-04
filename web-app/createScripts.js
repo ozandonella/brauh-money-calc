@@ -3,11 +3,10 @@ const jobMap = new Map()
 
 function startScripts(){
     assignJobValues()
-    document.getElementById("createEmployeeButton").addEventListener("click", createEmployee)
-    document.getElementById("createCheckoutButton").addEventListener("click", createCheckout)
+    document.getElementById("createButton").addEventListener("click", createFunction)
+    document.getElementById("createForm").addEventListener("change", displayCreationData)
     document.getElementById("employeeJob").addEventListener("change", jobUpdate)
     document.getElementById("employeeName").addEventListener("input", copyEmployeeNameToCheckout)
-    document.getElementById("createJobButton").addEventListener("click", createJob)
     jobUpdate()
 }
 function copyEmployeeNameToCheckout(){
@@ -24,26 +23,26 @@ function assignJobValues(){
     jobMap.set("Busser",{points: 1.5, isServer: false})
     const jobSelect = document.getElementById("employeeJob")
     for(const [key, values] of jobMap) jobSelect.append(new Option(key+" "+"("+values.points+")",key))
-    jobMap.set("New",{points: 0, isServer: false})
-    jobSelect.append(document.getElementById("newJobOption"))
     jobSelect.selectedIndex = 0
 }
 function jobUpdate(){
-    const job = document.getElementById("employeeJob")
-    if(job.value==="New"){
-        document.getElementById("createJobForm").classList.remove("hidden")
-    }
-    else{
-        document.getElementById("createJobForm").classList.add("hidden")
-    }
-    if(jobMap.get(job.value)["isServer"]){
-        document.getElementById("checkoutName").value=document.getElementById("employeeName").value
-        document.querySelectorAll("#employeeCheckoutLabel, #employeeCheckout").forEach(el=>el.classList.remove("hidden"))
-    }
-    else{
-        document.querySelectorAll("#employeeCheckoutLabel, #employeeCheckout").forEach(el=>el.classList.add("hidden"))
-        document.getElementById("checkoutName").value=""
-    }
+
+}
+function displayCreationData(event){
+    if(event.target.name!=="createRadio") return
+    const divName = "create"+event.target.value+"Div"
+    document.querySelectorAll(".createFormData").forEach(el=>{
+        if(el.id===divName) el.classList.remove("hidden")
+        else(el.classList.add("hidden"))
+    }) 
+}
+function createFunction(){
+    const createFormElement = document.getElementById("createForm")
+    if(!checkFieldsFilled(createFormElement, ["createRadio"])) return
+    const createTarget = new FormData(createFormElement).get("createRadio")
+    if(createTarget==="Employee") createEmployee()
+    else if(createTarget==="Job") createJob()
+    else createCheckout()
 }
 function createEmployee(){
     const employeeFormElement = document.getElementById("createEmployeeForm")
@@ -55,7 +54,6 @@ function createEmployee(){
 function validateEmployee(employeeformElement){
     if(!checkFieldsFilled(employeeformElement, ["name"])) return false
     const isServer=jobMap.get(new FormData(employeeformElement).get("job")).isServer
-    console.log(isServer)
     return isServer&&checkFieldsFilled(employeeformElement, ["checkout"])
 }
 function createCheckout(){
@@ -70,9 +68,8 @@ function createJob(){
     jobMap.set(formData.get("job"),{points: Number.parseFloat(formData.get("points")), isServer: formData.get("isServer")==="yes" ? true : false})
     const jobSelect = document.getElementById("employeeJob")
     jobSelect.append(new Option(formData.get("job")+" "+"("+formData.get("points")+")",formData.get("job")))
-    jobSelect.append(document.getElementById("newJobOption"))
     jobFormElement.reset()
-    jobSelect.selectedIndex = jobMap.size-2
+    jobSelect.selectedIndex = jobMap.size-1
     jobSelect.dispatchEvent(new Event("change"))
 }
 function checkFieldsFilled(formElement, fieldNames){

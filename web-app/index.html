@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Brauhaus Money Calculator</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="createScripts.js"></script>
+    </head>
+    <body>
+        <h1>Brauhaus Money Calculator</h1>
+        <div>
+            <form id="createForm">
+                <button type="button" id="createButton">Create</button>
+                <label>Employee<input type="radio"  name="createRadio" value="Employee"></label>
+                <label>Job<input type="radio"  name="createRadio" value="Job"></label>
+                <label>Checkout<input type="radio"  name="createRadio" value="Checkout"></label>
+            </form>
+        </div>
+        <div id="subCreateData">
+            <div id="createEmployeeDiv" class="hidden createFormData">
+                <form id="createEmployeeForm">
+                    <label for="employeeName">Name</label> 
+                    <input type="text" id="employeeName" name="name" value="" placeholder="Name">
+        
+                    <label for="employeeJob">Job</label>
+                    <select id="employeeJob" name="job"></select>
+                    
+                    <label for="employeeHours">Hours</label>
+                    <input type="number" id="employeeHours" name="hours" value="" placeholder="0.0" min="0" step=".01">
+
+                    <label for="employeeCheckout" id="employeeCheckoutLabel">Checkout</label>
+                    <input type="number" id="employeeCheckout" name="checkout" value="" placeholder="0.0">
+                </form>
+            </div>
+            <div id="createJobDiv" class="hidden createFormData">
+                <form id="createJobForm">
+                    <label for="jobJob">Job</label>
+                    <input type="text" id="jobJob" name="job" placeholder="Ex: 3 Table Section">
+
+                    <label for="jobPoints">Points</label>
+                    <input type="number" id="jobPoints" name="points" placeholder="0.0" step=".05" value="" min="0.0" max="4.0">
+
+                    <label for="isServerJob">Server?</label>
+                    <input type="checkbox" id="isServerJob" name="isServer" value="yes">
+                </form>
+            </div>
+            <div id="createCheckoutDiv" class="hidden createFormData">
+                <form id="createCheckoutForm">
+                    <label for="checkoutName">Name</label>
+                    <input type="text" id="checkoutName" name="name" value="" placeholder="Name"> 
+
+                    <label for="checkoutCheckout">Amount</label>
+                    <input type="number" id="checkoutCheckout" name="checkout" value="" min="0.0" step=".01" placeholder="0.0"> 
+                </form>
+            </div>
+        </div>
+        <div>
+            <ul id="employeeLists">
+                
+            </ul>
+        </div>
+        <div>
+            <ul id="checkoutList">
+                
+            </ul>
+        </div>
+    </body>
+</html>
