@@ -4,15 +4,15 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Brauhaus Money Calculator</title>
-        <link rel="stylesheet" href="style.css">
-        <script src="createScripts.js"></script>
+        <link rel="stylesheet" href="assets/style.css">
+        <script src="js/main.js"></script>
     </head>
     <body>
         <h1>Brauhaus Money Calculator</h1>
         <div>
             <form id="createForm">
                 <button type="button" id="createButton">Create</button>
-                <label>Employee<input type="radio"  name="createRadio" value="Employee"></label>
+                <label>Employee<input id="employeeRadio" type="radio"  name="createRadio" value="Employee"></label>
                 <label>Job<input type="radio"  name="createRadio" value="Job"></label>
                 <label>Checkout<input type="radio"  name="createRadio" value="Checkout"></label>
             </form>
@@ -56,9 +56,9 @@
             </div>
         </div>
         <div>
-            <ul id="employeeLists">
-                
-            </ul>
+            <div id="employeeListDiv">
+
+            </div>
         </div>
         <div>
             <ul id="checkoutList">
