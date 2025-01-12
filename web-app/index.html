@@ -5,14 +5,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Brauhaus Money Calculator</title>
         <link rel="stylesheet" href="assets/style.css">
-        <script src="js/main.js"></script>
+        <script type="module" src="js/main.js"></script>
     </head>
     <body>
-        <h1>Brauhaus Money Calculator</h1>
+        <h1>Fart</h1>
         <div>
             <form id="createForm">
                 <button type="button" id="createButton">Create</button>
-                <label>Employee<input id="employeeRadio" type="radio"  name="createRadio" value="Employee"></label>
+                <label>Employee<input type="radio"  name="createRadio" value="Employee"></label>
                 <label>Job<input type="radio"  name="createRadio" value="Job"></label>
                 <label>Checkout<input type="radio"  name="createRadio" value="Checkout"></label>
             </form>
@@ -35,14 +35,16 @@
             </div>
             <div id="createJobDiv" class="hidden createFormData">
                 <form id="createJobForm">
-                    <label for="jobJob">Job</label>
-                    <input type="text" id="jobJob" name="job" placeholder="Ex: 3 Table Section">
-
-                    <label for="jobPoints">Points</label>
-                    <input type="number" id="jobPoints" name="points" placeholder="0.0" step=".05" value="" min="0.0" max="4.0">
-
-                    <label for="isServerJob">Server?</label>
-                    <input type="checkbox" id="isServerJob" name="isServer" value="yes">
+                    <label>
+                        Job <input type="text" name="job" placeholder="Ex: 3 Table Section">
+                    </label>
+                    <label>
+                        Points <input type="number" name="points" placeholder="0.0" step=".05" value="" min="0.0" max="4.0">
+                    </label>
+                    
+                    <label>
+                        Server? <input type="checkbox" name="isServer" value="yes">
+                    </label>
                 </form>
             </div>
             <div id="createCheckoutDiv" class="hidden createFormData">
@@ -56,11 +58,19 @@
             </div>
         </div>
         <div>
+            <h4>Job List</h4>
+            <ul id="jobList">
+
+            </ul>
+        </div>
+        <div>
+            <h4>Employee List</h4>
             <div id="employeeListDiv">
 
             </div>
         </div>
         <div>
+            <h4>Checkout List</h4>
             <ul id="checkoutList">
                 
             </ul>

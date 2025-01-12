@@ -1,3 +1,4 @@
+import { checkFieldsFilled } from "./CreateController.js"
 class Checkout{
     static checkoutCount
     static checkoutForm = document.getElementById("createCheckoutForm")
@@ -9,14 +10,10 @@ class Checkout{
         this.checkoutID = "checkout"+Checkout.checkoutCount
         Checkout.checkoutCount++
     }
-    static checkoutExists(name, job, hours){
-        Checkout.checkoutList.forEach(checkout => {
-            if(checkout.name===name&&checkout.job.equalTo(job)&&checkout.hours===hours)
-            return true
-        })
-        return false
-    }
-    static checkoutExists(id){
-        return !Checkout.checkoutList.every(checkout => checkout.checkoutID!==id)
+    static formCreate(){
+        const checkoutFormElement = document.getElementById("createCheckoutForm")
+        if(!checkFieldsFilled(checkoutFormElement, ["name"])) return
+        console.log("checkout created")
     }
 }
+export default Checkout
