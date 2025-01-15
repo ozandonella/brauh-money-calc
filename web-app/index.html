@@ -8,72 +8,55 @@
         <script type="module" src="js/main.js"></script>
     </head>
     <body>
-        <h1>Fart</h1>
-        <div>
-            <form id="createForm">
+        <section id="header">
+                  
+                <form id="createForm">
+                    <input id="employeeRadio" type="radio"  name="createRadio" value="Employee">
+                    <label for="employeeRadio">Employee</label>
+                    <input id="jobRadio" type="radio"  name="createRadio" value="Job">
+                    <label for="jobRadio">Job</label>
+                    <input id="checkoutRadio" type="radio"  name="createRadio" value="Checkout">
+                    <label for="checkoutRadio">Checkout</label>
+                </form>   
                 <button type="button" id="createButton">Create</button>
-                <label>Employee<input type="radio"  name="createRadio" value="Employee"></label>
-                <label>Job<input type="radio"  name="createRadio" value="Job"></label>
-                <label>Checkout<input type="radio"  name="createRadio" value="Checkout"></label>
-            </form>
-        </div>
-        <div id="subCreateData">
-            <div id="createEmployeeDiv" class="hidden createFormData">
-                <form id="createEmployeeForm">
-                    <label for="employeeName">Name</label> 
-                    <input type="text" id="employeeName" name="name" value="" placeholder="Name">
-        
-                    <label for="employeeJob">Job</label>
-                    <select id="employeeJob" name="job"></select>
+                <form id="createEmployeeForm" class="form subForm"> 
+                    <label>Name</label><input type="text" name="name" value="" placeholder="Name">
+                    <label>Job</label><select name="job"></select>
+                    <label>Hours</label><input type="number" name="hours" value="" placeholder="Hours" min="0" step=".01">
+                    <label class="employeeCheckoutInput">Checkout</label><input type="number" class="employeeCheckoutInput" name="checkout" placeholder="Checkout" value="">
+                </form>
+            
+                <form id="createJobForm" class="form subForm hidden">
+                    <label>Name</label><input type="text" name="job" placeholder="Name">
+                    <label>Points</label><input type="number" name="points" placeholder="Points" step=".05" value="" min="0.0" max="4.0">
+                    <label>Server?</label><input type="checkbox" name="isServer" value="yes">
+                </form>
+            
+                <form id="createCheckoutForm" class="form subForm hidden">
+                    <label>Name</label><input type="text" name="name" value="" placeholder="Name">
+                    <label>Amount</label><input type="number" id="checkoutCheckout" name="checkout" placeholder="Amount" value="" min="0.0" step=".01">
+                </form>
+            
+        </section>
+        <section id="lists">
+            <div>
+                <h4>Job List</h4>
+                <ul id="jobList">
+    
+                </ul>
+            </div>
+            <div>
+                <h4>Employee List</h4>
+                <div id="employeeListDiv">
+    
+                </div>
+            </div>
+            <div>
+                <h4>Checkout List</h4>
+                <ul id="checkoutList">
                     
-                    <label for="employeeHours">Hours</label>
-                    <input type="number" id="employeeHours" name="hours" value="" placeholder="0.0" min="0" step=".01">
-
-                    <label for="employeeCheckout" id="employeeCheckoutLabel">Checkout</label>
-                    <input type="number" id="employeeCheckout" name="checkout" value="" placeholder="0.0">
-                </form>
+                </ul>
             </div>
-            <div id="createJobDiv" class="hidden createFormData">
-                <form id="createJobForm">
-                    <label>
-                        Job <input type="text" name="job" placeholder="Ex: 3 Table Section">
-                    </label>
-                    <label>
-                        Points <input type="number" name="points" placeholder="0.0" step=".05" value="" min="0.0" max="4.0">
-                    </label>
-                    
-                    <label>
-                        Server? <input type="checkbox" name="isServer" value="yes">
-                    </label>
-                </form>
-            </div>
-            <div id="createCheckoutDiv" class="hidden createFormData">
-                <form id="createCheckoutForm">
-                    <label for="checkoutName">Name</label>
-                    <input type="text" id="checkoutName" name="name" value="" placeholder="Name"> 
-
-                    <label for="checkoutCheckout">Amount</label>
-                    <input type="number" id="checkoutCheckout" name="checkout" value="" min="0.0" step=".01" placeholder="0.0"> 
-                </form>
-            </div>
-        </div>
-        <div>
-            <h4>Job List</h4>
-            <ul id="jobList">
-
-            </ul>
-        </div>
-        <div>
-            <h4>Employee List</h4>
-            <div id="employeeListDiv">
-
-            </div>
-        </div>
-        <div>
-            <h4>Checkout List</h4>
-            <ul id="checkoutList">
-                
-            </ul>
-        </div>
+        </section>
     </body>
 </html>

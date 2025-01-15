@@ -5,6 +5,7 @@ class Job{
     static jobList = []
     static createJobForm = document.getElementById("createJobForm")
     static selectedListItemJob = null
+    static createEmployeeJobSelect = document.getElementById("createEmployeeForm").querySelector("select")
     constructor(name, points, isServer){
         this.name = name
         this.points = points
@@ -16,13 +17,17 @@ class Job{
         Job.jobCount++
     }
     static addListeners(){
-        document.getElementById("employeeJob").addEventListener("change", Job.jobUpdate)
+        Job.createEmployeeJobSelect.addEventListener("change", Job.jobUpdate)
     }
     static formCreate(){
         if(!Job.validateJobForm()) return
         const fromData = new FormData(Job.createJobForm)
         new Job(fromData.get("job"), fromData.get("points"), fromData.get("isServer")).append()
-
+        Job.createEmployeeJobSelect.selectedIndex = Job.createEmployeeJobSelect.options.length - 1
+        Job.createJobForm.reset()
+        const employeeRadio = document.getElementById("createForm").querySelector('input[value="Employee"]')
+        employeeRadio.checked = true
+        employeeRadio.dispatchEvent(new Event("change", {bubbles: true})) 
     }
     static validateJobForm(){
         if(!checkFieldsFilled(Job.createJobForm, ["job", "points"])){
@@ -43,28 +48,22 @@ class Job{
         return Job.jobList.find(job => job.optionHTML.selected)
     }
     static jobUpdate(){
-        const employeeCheckoutElement = document.getElementById("employeeCheckout")
-        const employeeCheckoutLabelElement = document.getElementById("employeeCheckoutLabel")
-        console.log(Job.findSelected())
+        const employeeCheckoutElements = document.querySelectorAll(".employeeCheckoutInput")
         if(Job.findSelected().isServer){
-            employeeCheckoutElement.classList.remove("hidden")
-            employeeCheckoutLabelElement.classList.remove("hidden")
+            employeeCheckoutElements.forEach(el => el.classList.remove("hidden"))
         }
         else{
-            employeeCheckoutElement.classList.add("hidden")
-            employeeCheckoutLabelElement.classList.add("hidden")
+            employeeCheckoutElements.forEach(el => el.classList.add("hidden"))
         }
     }
     append(){
         if(!this.isAppended){
-            document.getElementById("employeeJob").append(this.optionHTML)
+            Job.createEmployeeJobSelect.append(this.optionHTML)
             document.getElementById("jobList").append(this.listHTML)
             Job.jobList.push(this)
             console.log("appended element")
         }
-        else{
-            document.getElementById("employeeJob").append(this.optionHTML)
-        }
+        else console.log("this job is already appednded")
     }
     /*equalTo(otherJob){
         return Object.keys(this).every(key => this[key]===otherJob[key])

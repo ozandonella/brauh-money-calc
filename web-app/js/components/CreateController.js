@@ -8,16 +8,17 @@ class CreateController{
     }
     static startScripts(){
         document.getElementById("createButton").addEventListener("click", CreateController.createFunction)
-        document.getElementById("createForm").addEventListener("change", CreateController.displayCreationData)
-        document.getElementById("employeeJob").addEventListener("change", CreateController.jobUpdate)
-        document.getElementById("employeeName").addEventListener("input", CreateController.copyEmployeeNameToCheckout)
+        document.getElementById("createForm").addEventListener("change", CreateController.displayForm)
+        const employeeRadio = document.getElementById("createForm").querySelector('input[value="Employee"]')
+        employeeRadio.checked = true
+        employeeRadio.dispatchEvent(new Event("change", {bubbles: true}))
         Job.addListeners()
         Job.addBaseJobs()
     }
-    static displayCreationData(event){
+    static displayForm(event){
         if(event.target.name!=="createRadio") return
-        const divName = "create"+event.target.value+"Div"
-        document.querySelectorAll(".createFormData").forEach(el=>{
+        const divName = "create"+event.target.value+"Form"
+        document.querySelectorAll(".subForm").forEach(el=>{
             if(el.id===divName) el.classList.remove("hidden")
             else(el.classList.add("hidden"))
         }) 
@@ -36,20 +37,27 @@ class CreateController{
         return true
     }
 }
+export const createFormForList = (formElement) => {
+    const form = formElement.cloneNode(true)
+    form.id = null
+    
+    form.classList.add("")
+} 
+export const createButtonForList = (name) => {
+    const button = document.createElement("button")
+    button.setAttribute("class", name+"Button")
+    button.setAttribute("type", "button")
+    button.innerText = name
+    return button
+}
 export const createEditAndDelete = () => {
     const container = document.createElement("div")
     container.classList.add("editAndDelete")
     container.classList.add("hidden")
 
-    const deleteButton = document.createElement("button")
-    deleteButton.setAttribute("class", "deleteButton")
-    deleteButton.setAttribute("type", "button")
-    deleteButton.innerText = "del"
+    const deleteButton = createButtonForList("del")
+    const editButton = createButtonForList("edit")
 
-    const editButton = document.createElement("button")
-    deleteButton.setAttribute("class", "editButton")
-    editButton.setAttribute("type", "button")
-    editButton.innerText = "edit"
     container.append(editButton) 
     container.append(deleteButton)
     return container
@@ -59,17 +67,11 @@ export const createDoneAndCancel = () => {
     container.classList.add("doneAndCancel")
     container.classList.add("hidden")
 
-    const doneButton = document.createElement("button")
-    doneButton.setAttribute("class", "doneButton")
-    doneButton.setAttribute("type", "button")
-    doneButton.innerText = "done"
+    const doneButton = createButtonForList("done")
+    const cancelButton = createButtonForList("cancel")
 
-    const cancelButton = document.createElement("button")
-    doneButton.setAttribute("class", "cancelButton")
-    cancelButton.setAttribute("type", "button")
-    cancelButton.innerText = "cancel"
-    container.append(cancelButton) 
-    container.append(doneButton)
+    container.append(doneButton) 
+    container.append(cancelButton)
     return container
 }
 export const checkFieldsFilled = CreateController.checkFieldsFilled

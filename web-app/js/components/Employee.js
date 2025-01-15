@@ -26,6 +26,9 @@ class Employee{
         if(!validateEmployee(employeeFormElement)) return
         const formData = new FormData(employeeFormElement)
         const employee = new Employee(formData.get("name"), formData.get("job"), formData.get("hours"))
+        if(employee.job.isServer){
+            console.log("creating checkout...")
+        } 
         console.log(employee)
         const employeeDivElement = document.getElementById("employeeDiv")
         console.log("employee created")
@@ -36,7 +39,7 @@ class Employee{
             console.log("employee must have name")
             return false
         }
-        const isServer=jobMap.get(new FormData(employeeformElement).get("job")).isServer
+        const isServer=FormData(employeeformElement).get("job")
         if(isServer&&!checkFieldsFilled(employeeformElement, ["checkout"])){
             console.log("server employee must have a checkout")
             return false
