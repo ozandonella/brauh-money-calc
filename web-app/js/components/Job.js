@@ -63,7 +63,21 @@ class Job{
             Job.jobList.push(this)
             console.log("appended element")
         }
-        else console.log("this job is already appednded")
+        else console.log("this job is already appended")
+    }
+    createFormFromThis(){
+        const form = Job.createJobForm.cloneNode(true)
+        form.id = null
+        const formData = new FormData(form)
+        formData.append("job", this.name)
+        formData.append("points", this.points)
+        for(const [name, value] of formData.entries()){
+            form.querySelector("input[name='"+name+"']").value = value
+        } 
+        if (this.isServer) form.querySelector("input[type='checkbox']").checked = true
+        
+
+        return form
     }
     /*equalTo(otherJob){
         return Object.keys(this).every(key => this[key]===otherJob[key])
@@ -89,25 +103,10 @@ class Job{
         }
         jobItemElement.addEventListener("click", displayEditAndDelete)
         jobItemElement.addEventListener("touchend", displayEditAndDelete)
-    
-        const form = document.createElement("form")
-        form.setAttribute("class", "editJobForm")
-        const nameInput = document.createElement("input")
-        nameInput.setAttribute("value", this.name)
-        nameInput.setAttribute("type", "text")
-        nameInput.setAttribute("placeholder", "Job Desc")
-
-        const pointInput = document.createElement("input")
-        pointInput.setAttribute("value", this.points)
-        pointInput.setAttribute("type", "number")
-        pointInput.setAttribute("placeholder", "0.0")
-
-        const isServerInput = document.createElement("input")
-        isServerInput.setAttribute("type", "checkbox")
-        isServerInput.checked = this.isServer
-        form.append(nameInput)
-        form.append(pointInput)
-        form.append(isServerInput)
+        
+        const form = this.createFormFromThis()
+        form.setAttribute("class", "form")
+        form.classList.add("subForm")
         jobItemElement.append(form)
         jobItemElement.append(editAndDelete)
         this.listHTML = jobItemElement

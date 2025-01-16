@@ -18,7 +18,7 @@ class CreateController{
     static displayForm(event){
         if(event.target.name!=="createRadio") return
         const divName = "create"+event.target.value+"Form"
-        document.querySelectorAll(".subForm").forEach(el=>{
+        document.querySelectorAll("#header .subForm").forEach(el=>{
             if(el.id===divName) el.classList.remove("hidden")
             else(el.classList.add("hidden"))
         }) 
@@ -37,12 +37,6 @@ class CreateController{
         return true
     }
 }
-export const createFormForList = (formElement) => {
-    const form = formElement.cloneNode(true)
-    form.id = null
-    
-    form.classList.add("")
-} 
 export const createButtonForList = (name) => {
     const button = document.createElement("button")
     button.setAttribute("class", name+"Button")

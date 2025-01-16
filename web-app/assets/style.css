@@ -21,7 +21,10 @@ body {
     border-right: 0;
 }
 
-.subForm label{
+.subForm label:not(.checkbox){
+    display: none;
+}
+.subForm input[type="checkbox"]{
     display: none;
 }
 .form{
@@ -36,6 +39,7 @@ input[type="number"]::-webkit-outer-spin-button{
     appearance: none;
     margin: 0;
 }
+label[class="checkbox"],
 .form input,
 .form select{
     box-sizing: border-box;
@@ -47,6 +51,28 @@ input[type="number"]::-webkit-outer-spin-button{
     color: white;
     font-size: 120%;
     background-color: rgb(8, 8, 8);
+}
+label[class="checkbox"]{
+    display: flex;
+    gap: 3px;
+    justify-content: center;
+    align-items: center;
+}
+label[class="checkbox"]::after{
+    width: 15%;
+    content: "No";
+}
+input[class="checkbox"]:checked + label{
+    background-color: rgb(31, 26, 60);
+}
+input[class="checkbox"]:checked + label::after{
+    width: 15%;
+    content: "Yes";
+}
+.form input:focus,
+.form select:focus{
+    border: 2px solid white;
+    outline: none;
 }
 #createForm {
     text-align: center;
@@ -61,7 +87,7 @@ input[type="number"]::-webkit-outer-spin-button{
 }
 #createForm label{    
     background-color: rgb(8, 8, 8);
-    border: 3px solid rgb(86, 86, 86);
+    border: 2px solid rgb(86, 86, 86);
     border-top: 0;
     border-bottom-right-radius: 15px;
     border-bottom-left-radius: 15px;
@@ -69,9 +95,6 @@ input[type="number"]::-webkit-outer-spin-button{
     align-items: center;
     text-align: center;
     font-size: 120%;
-}
-input[type="checkbox"] + label{
-
 }
 
 #header button{
@@ -88,6 +111,9 @@ input[type="checkbox"] + label{
 }
 #header button:hover{
     background-color: rgb(37, 83, 43);
+}
+#header button:active{
+    background-color: rgb(8, 8, 8);
 }
 
 #createForm input[type="radio"]:checked + label{
