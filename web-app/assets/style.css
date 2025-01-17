@@ -1,4 +1,7 @@
 
+.hidden {
+    display: none !important;
+}
 body {
     font-family: Verdana;
     background-color: rgb(8, 8, 8);
@@ -15,10 +18,6 @@ body {
     grid-template-rows: 4fr 5fr;
     grid-template-columns: 20% 80%;
     height: 90px;
-    border: 2px, solid, rgb(86, 86, 86);
-    border-top: 0;
-    border-left: 0;
-    border-right: 0;
 }
 
 .subForm label:not(.checkbox){
@@ -39,33 +38,32 @@ input[type="number"]::-webkit-outer-spin-button{
     appearance: none;
     margin: 0;
 }
-label[class="checkbox"],
+label.checkbox,
 .form input,
 .form select{
     box-sizing: border-box;
     border: 2px solid rgb(86, 86, 86);
     border-left: 0;
-    border-bottom: 0;
     text-align: center;
     width: 100%;
     color: white;
     font-size: 120%;
     background-color: rgb(8, 8, 8);
 }
-label[class="checkbox"]{
+label.checkbox{
     display: flex;
     gap: 3px;
     justify-content: center;
     align-items: center;
 }
-label[class="checkbox"]::after{
+label.checkbox::after{
     width: 15%;
     content: "No";
 }
-input[class="checkbox"]:checked + label{
+input.checkbox:checked + label{
     background-color: rgb(31, 26, 60);
 }
-input[class="checkbox"]:checked + label::after{
+input.checkbox:checked + label::after{
     width: 15%;
     content: "Yes";
 }
@@ -100,7 +98,6 @@ input[class="checkbox"]:checked + label::after{
 #header button{
     background-color: rgb(8, 8, 8);
     border: 3px, solid rgb(86, 86, 86);
-    border-bottom: 0;
     border-left: 0;
     border-top: 0;
     grid-area: 1/1/3/2;
@@ -114,18 +111,59 @@ input[class="checkbox"]:checked + label::after{
 }
 #header button:active{
     background-color: rgb(8, 8, 8);
+    border-color: white;
 }
 
 #createForm input[type="radio"]:checked + label{
     background-color: rgb(62, 148, 75);
+    border-color: white;
 }
 #lists {
     padding-top: 162px;
 }
-.hidden {
-    display: none;
+.editAndDelete{
+    display: flex;
 }
+#lists{
+    display: grid;
+    grid-template-columns: 3fr 2fr;
 
+}
+#lists div{
+    border: 1px, solid, rgb(86, 86, 86);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+#lists h4{
+    text-align: center;
+    border: 1px, solid, rgb(86, 86, 86);
+    width: 50%;
+}
+#jobListContainer{
+    grid-area: 2/2/3/3;
+}
+ul,
+#lists h4{
+    margin: 0;
+    padding: 0;
+}
+li{
+    display: grid;
+}
+.listForm label,
+.listForm input{
+    border: 1px solid rgb(86, 86, 86);
+}
+.selectedListItem form label,
+.selectedListItem form input{
+    border-color: white;
+    opacity: 100%;
+}
+.disabled {
+    pointer-events: none;
+    opacity: .5;
+}
 
 
 

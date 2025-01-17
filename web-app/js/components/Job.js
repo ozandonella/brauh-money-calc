@@ -44,12 +44,12 @@ class Job{
         new Job("BBK", 1.75, false).append()
         new Job("Busser", 1.5, false).append()
     }
-    static findSelected(){
+    static findSelectedOptionJob(){
         return Job.jobList.find(job => job.optionHTML.selected)
     }
     static jobUpdate(){
         const employeeCheckoutElements = document.querySelectorAll(".employeeCheckoutInput")
-        if(Job.findSelected().isServer){
+        if(Job.findSelectedOptionJob().isServer){
             employeeCheckoutElements.forEach(el => el.classList.remove("hidden"))
         }
         else{
@@ -73,15 +73,30 @@ class Job{
         formData.append("points", this.points)
         for(const [name, value] of formData.entries()){
             form.querySelector("input[name='"+name+"']").value = value
-        } 
+        }
+        const checkbox = form.querySelector("input[class = 'checkbox']")
+        checkbox.id += "List" + Job.jobCount
+        form.querySelector("label[class = 'checkbox']").setAttribute("for", checkbox.id)
         if (this.isServer) form.querySelector("input[type='checkbox']").checked = true
-        
-
         return form
+    }
+    setThisFormDisabled(isDisabled){
+        for(const el of this.listHTML.querySelector("form").children) isDisabled ? el.classList.add("disabled") : el.classList.remove("disabled")
     }
     /*equalTo(otherJob){
         return Object.keys(this).every(key => this[key]===otherJob[key])
     }*/
+    selectListItem(event){
+        if(Job.selectedListItemJob&&Job.selectedListItemJob.listHTML.contains(event.target)) return
+        const editAndDelete = this.listHTML.querySelector(".editAndDelete")
+        this.listHTML.classList.add("selectedListItem")
+        editAndDelete.classList.remove("hidden")
+        if(Job.selectedListItemJob){
+            Job.selectedListItemJob.listHTML.classList.remove("selectedListItem")
+            Job.selectedListItemJob.listHTML.querySelector(".editAndDelete").classList.add("hidden")
+        } 
+        Job.selectedListItemJob = this
+    }
     setHTML(){
         const jobOptionElement = document.createElement("option")
         jobOptionElement.setAttribute("value", this.name)
@@ -90,26 +105,23 @@ class Job{
         this.optionHTML = jobOptionElement
 
         const jobItemElement = document.createElement("li")
-        jobItemElement.setAttribute("id", "jobListitem"+Job.jobCount)
-        const editAndDelete = createEditAndDelete() 
+        jobItemElement.setAttribute("id", "jobListItem"+Job.jobCount)
+        const editAndDelete = createEditAndDelete()
         editAndDelete.querySelector(".editButton")
         editAndDelete.querySelector(".deleteButton")
-
-        const displayEditAndDelete = (event) => {
-            if(Job.selectedListItemJob&&Job.selectedListItemJob.listHTML.contains(event.target)) return
-            editAndDelete.classList.remove("hidden")
-            if(Job.selectedListItemJob) Job.selectedListItemJob.listHTML.querySelector(".editAndDelete").classList.add("hidden")
-            Job.selectedListItemJob = this
-        }
-        jobItemElement.addEventListener("click", displayEditAndDelete)
-        jobItemElement.addEventListener("touchend", displayEditAndDelete)
         
         const form = this.createFormFromThis()
         form.setAttribute("class", "form")
         form.classList.add("subForm")
+        form.classList.add("listForm")
         jobItemElement.append(form)
         jobItemElement.append(editAndDelete)
         this.listHTML = jobItemElement
+        this.setThisFormDisabled(true)
+        jobItemElement.addEventListener("click", this.selectListItem.bind(this))
+        jobItemElement.addEventListener("touchend", this.selectListItem.bind(this))
+        if(!Job.selectedListItemJob) jobItemElement.dispatchEvent(new Event("click", {bubbles: true}))
+        
     }
 }
 export default Job
