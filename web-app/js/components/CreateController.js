@@ -37,20 +37,29 @@ class CreateController{
         return true
     }
 }
-export const createButtonForList = (name) => {
+export const getIconElement = (className, iconName) => {
+    const icon = document.createElement("span")
+    icon.setAttribute("class", className)
+    icon.innerText = iconName
+    console.log(icon)
+    return icon
+}
+export const createButtonForList = (iconElement) => {
     const button = document.createElement("button")
-    button.setAttribute("class", name+"Button")
+    button.append(iconElement)
+    button.setAttribute("class", iconElement.innerText+"Button")
     button.setAttribute("type", "button")
-    button.innerText = name
     return button
 }
 export const createEditAndDelete = () => {
     const container = document.createElement("div")
     container.classList.add("editAndDelete")
-    container.classList.add("hidden")
 
-    const deleteButton = createButtonForList("del")
-    const editButton = createButtonForList("edit")
+
+    const deleteButton = createButtonForList(getIconElement("material-symbols-outlined", "delete"))
+    const editButton = createButtonForList(getIconElement("material-symbols-outlined", "edit"))
+
+
 
     container.append(editButton) 
     container.append(deleteButton)

@@ -1,4 +1,3 @@
-
 .hidden {
     display: none !important;
 }
@@ -95,7 +94,7 @@ input.checkbox:checked + label::after{
     font-size: 120%;
 }
 
-#header button{
+#createButton{
     background-color: rgb(8, 8, 8);
     border: 3px, solid rgb(86, 86, 86);
     border-left: 0;
@@ -106,13 +105,10 @@ input.checkbox:checked + label::after{
     background-color: rgb(62, 148, 75);
     color: white;
 }
-#header button:hover{
+#createButton:hover{
     background-color: rgb(37, 83, 43);
 }
-#header button:active{
-    background-color: rgb(8, 8, 8);
-    border-color: white;
-}
+
 
 #createForm input[type="radio"]:checked + label{
     background-color: rgb(62, 148, 75);
@@ -123,42 +119,80 @@ input.checkbox:checked + label::after{
 }
 .editAndDelete{
     display: flex;
+    height: fit-content;
+}
+.editAndDelete button{
+   width: 50%;
+    background-color: rgb(8, 8, 8);
+    height: 26px;
+    border: 2px, solid, rgb(86, 86, 86);
+    border-left: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.deleteButton:hover{
+    background-color: rgb(110, 21, 21);
+}
+.editButton .material-symbols-outlined{
+    color: rgb(111, 119, 205);
+}
+.editButton:hover{
+    background-color: rgb(63, 67, 118);
+}
+.deleteButton .material-symbols-outlined{
+    color: rgb(190, 34, 34);
+}
+#createButton:active,
+.deleteButton:active,
+.editButton:active{
+    background-color: rgb(8, 8, 8);
+    border-color: white;
+}
+form span{
+   
 }
 #lists{
     display: grid;
     grid-template-columns: 3fr 2fr;
 
 }
-#lists div{
-    border: 1px, solid, rgb(86, 86, 86);
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-}
 #lists h4{
     text-align: center;
     border: 1px, solid, rgb(86, 86, 86);
     width: 50%;
+    flex: 1;
 }
 #jobListContainer{
     grid-area: 2/2/3/3;
 }
+
 ul,
 #lists h4{
     margin: 0;
     padding: 0;
 }
-li{
-    display: grid;
+.listForm{
+    grid-template-columns: 2fr 1fr 2fr 1fr;
+    
 }
 .listForm label,
-.listForm input{
+.listForm input,
+.listForm button{
     border: 1px solid rgb(86, 86, 86);
 }
+#lists > div{
+    border: 1px, solid, rgb(86, 86, 86);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 .selectedListItem form label,
-.selectedListItem form input{
+.selectedListItem form input,
+.selectedListItem form button,
+.selectedListItem form div{
     border-color: white;
-    opacity: 100%;
+    opacity: 1;
 }
 .disabled {
     pointer-events: none;

@@ -1,4 +1,4 @@
-import { checkFieldsFilled } from "./CreateController.js"
+import { checkFieldsFilled, getIconElement } from "./CreateController.js"
 import { createEditAndDelete } from "./CreateController.js"
 class Job{
     static jobCount = 0
@@ -81,7 +81,7 @@ class Job{
         return form
     }
     setThisFormDisabled(isDisabled){
-        for(const el of this.listHTML.querySelector("form").children) isDisabled ? el.classList.add("disabled") : el.classList.remove("disabled")
+        for(const el of this.listHTML.querySelectorAll("label, input, div")) isDisabled ? el.classList.add("disabled") : el.classList.remove("disabled")
     }
     /*equalTo(otherJob){
         return Object.keys(this).every(key => this[key]===otherJob[key])
@@ -90,10 +90,12 @@ class Job{
         if(Job.selectedListItemJob&&Job.selectedListItemJob.listHTML.contains(event.target)) return
         const editAndDelete = this.listHTML.querySelector(".editAndDelete")
         this.listHTML.classList.add("selectedListItem")
-        editAndDelete.classList.remove("hidden")
+        this.setThisFormDisabled(false)
+        //editAndDelete.classList.remove("hidden")
         if(Job.selectedListItemJob){
             Job.selectedListItemJob.listHTML.classList.remove("selectedListItem")
-            Job.selectedListItemJob.listHTML.querySelector(".editAndDelete").classList.add("hidden")
+            Job.selectedListItemJob.setThisFormDisabled(true)
+            //Job.selectedListItemJob.listHTML.querySelector(".editAndDelete").classList.add("hidden")
         } 
         Job.selectedListItemJob = this
     }
@@ -107,6 +109,8 @@ class Job{
         const jobItemElement = document.createElement("li")
         jobItemElement.setAttribute("id", "jobListItem"+Job.jobCount)
         const editAndDelete = createEditAndDelete()
+
+
         editAndDelete.querySelector(".editButton")
         editAndDelete.querySelector(".deleteButton")
         
@@ -114,8 +118,8 @@ class Job{
         form.setAttribute("class", "form")
         form.classList.add("subForm")
         form.classList.add("listForm")
+        form.append(editAndDelete)
         jobItemElement.append(form)
-        jobItemElement.append(editAndDelete)
         this.listHTML = jobItemElement
         this.setThisFormDisabled(true)
         jobItemElement.addEventListener("click", this.selectListItem.bind(this))
