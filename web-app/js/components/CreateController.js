@@ -41,7 +41,6 @@ export const getIconElement = (className, iconName) => {
     const icon = document.createElement("span")
     icon.setAttribute("class", className)
     icon.innerText = iconName
-    console.log(icon)
     return icon
 }
 export const createButtonForList = (iconElement) => {
@@ -55,23 +54,20 @@ export const createEditAndDelete = () => {
     const container = document.createElement("div")
     container.classList.add("editAndDelete")
 
-
     const deleteButton = createButtonForList(getIconElement("material-symbols-outlined", "delete"))
     const editButton = createButtonForList(getIconElement("material-symbols-outlined", "edit"))
-
-
 
     container.append(editButton) 
     container.append(deleteButton)
     return container
 }
-export const createDoneAndCancel = () => {
+export const createCheckAndClose = () => {
     const container = document.createElement("div")
-    container.classList.add("doneAndCancel")
-    container.classList.add("hidden")
+    container.classList.add("checkAndClose")
+    //container.classList.add("hidden")
 
-    const doneButton = createButtonForList("done")
-    const cancelButton = createButtonForList("cancel")
+    const doneButton = createButtonForList(getIconElement("material-symbols-outlined", "check"))
+    const cancelButton = createButtonForList(getIconElement("material-symbols-outlined", "close"))
 
     container.append(doneButton) 
     container.append(cancelButton)

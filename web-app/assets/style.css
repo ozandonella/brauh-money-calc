@@ -19,18 +19,19 @@ body {
     height: 90px;
 }
 
-.subForm label:not(.checkbox){
+.subForm label:not(.checkbox),
+.listForm label:not(.checkbox){
     display: none;
 }
-.subForm input[type="checkbox"]{
+.subForm input.checkbox,
+.listForm input.checkbox{
     display: none;
 }
 .form{
     grid-area: 2/2/3/3;
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    
+    grid-template-columns: repeat(4, 1fr);   
 }
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button{
@@ -54,17 +55,6 @@ label.checkbox{
     gap: 3px;
     justify-content: center;
     align-items: center;
-}
-label.checkbox::after{
-    width: 15%;
-    content: "No";
-}
-input.checkbox:checked + label{
-    background-color: rgb(31, 26, 60);
-}
-input.checkbox:checked + label::after{
-    width: 15%;
-    content: "Yes";
 }
 .form input:focus,
 .form select:focus{
@@ -122,35 +112,10 @@ input.checkbox:checked + label::after{
     height: fit-content;
 }
 .editAndDelete button{
-   width: 50%;
-    background-color: rgb(8, 8, 8);
-    height: 26px;
-    border: 2px, solid, rgb(86, 86, 86);
-    border-left: 0;
+    width: 50%;
     padding: 0;
+    padding-top: 5%;
     margin: 0;
-}
-
-.deleteButton:hover{
-    background-color: rgb(110, 21, 21);
-}
-.editButton .material-symbols-outlined{
-    color: rgb(111, 119, 205);
-}
-.editButton:hover{
-    background-color: rgb(63, 67, 118);
-}
-.deleteButton .material-symbols-outlined{
-    color: rgb(190, 34, 34);
-}
-#createButton:active,
-.deleteButton:active,
-.editButton:active{
-    background-color: rgb(8, 8, 8);
-    border-color: white;
-}
-form span{
-   
 }
 #lists{
     display: grid;
@@ -166,39 +131,72 @@ form span{
 #jobListContainer{
     grid-area: 2/2/3/3;
 }
-
-ul,
-#lists h4{
-    margin: 0;
-    padding: 0;
-}
-.listForm{
-    grid-template-columns: 2fr 1fr 2fr 1fr;
-    
-}
-.listForm label,
-.listForm input,
-.listForm button{
-    border: 1px solid rgb(86, 86, 86);
-}
 #lists > div{
     border: 1px, solid, rgb(86, 86, 86);
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-.selectedListItem form label,
-.selectedListItem form input,
-.selectedListItem form button,
-.selectedListItem form div{
+ul,
+#lists h4{
+    margin: 0;
+    padding: 0;
+}
+.listForm{
+    grid-area: 2/2/3/3;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 2fr .5fr 2fr 2fr;
+}
+.listForm label.checkbox,
+.listForm input,
+.listForm select,
+.listForm button{
+    box-sizing: border-box;
+    border: 1px solid rgba(86, 86, 86, .5);
+    color: rgba(255, 255, 255, .5);
+    background-color: rgba(8, 8, 8, 1);
+    border-left: 0;
+    text-align: center;
+    font-size: 100%;
+}
+.material-symbols-outlined{
+    color: rgba(255, 255, 255, .5);
+}
+.deleteButton:hover{
+    background-color: rgb(110, 21, 21);
+}
+.selectedListItem .editButton .material-symbols-outlined{
+    color: rgb(111, 119, 205);
+}
+.editButton:hover{
+    background-color: rgb(63, 67, 118);
+}
+.selectedListItem .deleteButton .material-symbols-outlined{
+    color: rgb(190, 34, 34);
+}
+#createButton:active,
+.deleteButton:active,
+.editButton:active{
+    background-color: rgb(8, 8, 8);
     border-color: white;
-    opacity: 1;
+}
+
+.selectedListItem button{
+    border: 1px solid rgba(255, 255, 255, 1);
+    border-right: 0;
+}
+.listForm input:focus,
+.listForm select:focus{
+    border: 1px solid white;
+    outline: none;
+}
+label.checkbox.checked{
+    background-color: rgb(31, 26, 60);
 }
 .disabled {
     pointer-events: none;
-    opacity: .5;
 }
-
 
 
   

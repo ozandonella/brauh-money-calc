@@ -11,13 +11,14 @@ class Job{
         this.points = points
         this.isServer = isServer
         this.optionHTML = null
-        this.listHTML = null
+        this.updateFormHTML = null
         this.setHTML()
         this.isAppended = false
         Job.jobCount++
     }
     static addListeners(){
         Job.createEmployeeJobSelect.addEventListener("change", Job.jobUpdate)
+        document.getElementById("isServer").addEventListener("change", Job.isServerUpdate)
     }
     static formCreate(){
         if(!Job.validateJobForm()) return
@@ -56,46 +57,83 @@ class Job{
             employeeCheckoutElements.forEach(el => el.classList.add("hidden"))
         }
     }
+    static isServerUpdate(event){
+        var text = ""
+        if(Job.createJobForm.contains(event.target)) text = "Server: "
+        const label = document.getElementById(event.target.id + "Label")
+        if(event.target.checked){
+            text += "yes"
+            label.classList.add("checked")
+        }
+        else{
+            text += "no"
+            label.classList.remove("checked")
+        }
+       label.innerText = text
+    }
     append(){
         if(!this.isAppended){
             Job.createEmployeeJobSelect.append(this.optionHTML)
-            document.getElementById("jobList").append(this.listHTML)
+            document.getElementById("jobList").append(this.updateFormHTML)
             Job.jobList.push(this)
-            console.log("appended element")
         }
         else console.log("this job is already appended")
     }
     createFormFromThis(){
         const form = Job.createJobForm.cloneNode(true)
-        form.id = null
+        form.id = ""
+        form.className = ""
         const formData = new FormData(form)
         formData.append("job", this.name)
         formData.append("points", this.points)
         for(const [name, value] of formData.entries()){
             form.querySelector("input[name='"+name+"']").value = value
         }
-        const checkbox = form.querySelector("input[class = 'checkbox']")
+        const checkbox = form.querySelector("input.checkbox")
+
         checkbox.id += "List" + Job.jobCount
-        form.querySelector("label[class = 'checkbox']").setAttribute("for", checkbox.id)
-        if (this.isServer) form.querySelector("input[type='checkbox']").checked = true
+        checkbox.addEventListener("change", Job.isServerUpdate)
+        const label = form.querySelector("label.checkbox")
+        label.setAttribute("for", checkbox.id)
+        label.setAttribute("id", checkbox.id + "Label")
+        if(this.isServer){
+            checkbox.checked = true
+            label.innerText = "yes"
+            label.classList.add("checked")
+        }
+        else{
+            checkbox.checked = false
+            label.innerText = "no"
+            label.classList.remove("checked")
+        }
         return form
     }
     setThisFormDisabled(isDisabled){
-        for(const el of this.listHTML.querySelectorAll("label, input, div")) isDisabled ? el.classList.add("disabled") : el.classList.remove("disabled")
+        for(const el of this.updateFormHTML.querySelectorAll("label, input, div")) isDisabled ? el.classList.add("disabled") : el.classList.remove("disabled")
     }
     /*equalTo(otherJob){
         return Object.keys(this).every(key => this[key]===otherJob[key])
     }*/
+    displayCheckAndClose(event){
+
+    }
+    updateListItem(event){
+
+    }
+    deleteListItem(event){
+
+    }
     selectListItem(event){
-        if(Job.selectedListItemJob&&Job.selectedListItemJob.listHTML.contains(event.target)) return
-        const editAndDelete = this.listHTML.querySelector(".editAndDelete")
-        this.listHTML.classList.add("selectedListItem")
-        this.setThisFormDisabled(false)
+        if(Job.selectedListItemJob&&Job.selectedListItemJob.updateFormHTML.contains(event.target)) return
+        const editAndDelete = this.updateFormHTML.querySelector(".editAndDelete")
+        this.updateFormHTML.classList.add("selectedListItem")
+        editAndDelete.classList.remove("disabled")
+        //this.setThisFormDisabled(false)
         //editAndDelete.classList.remove("hidden")
         if(Job.selectedListItemJob){
-            Job.selectedListItemJob.listHTML.classList.remove("selectedListItem")
+            Job.selectedListItemJob.updateFormHTML.classList.remove("selectedListItem")
             Job.selectedListItemJob.setThisFormDisabled(true)
-            //Job.selectedListItemJob.listHTML.querySelector(".editAndDelete").classList.add("hidden")
+            //Job.selectedListItemJob.updateFormHTML.querySelector(".editAndDelete").classList.add("hidden")
         } 
         Job.selectedListItemJob = this
     }
@@ -106,25 +144,22 @@ class Job{
         jobOptionElement.innerText=this.name + "(" +this.points +")"
         this.optionHTML = jobOptionElement
 
-        const jobItemElement = document.createElement("li")
-        jobItemElement.setAttribute("id", "jobListItem"+Job.jobCount)
+        const jobUpdateFormElement = this.createFormFromThis()
+        jobUpdateFormElement.setAttribute("id", "jobUpdateForm"+Job.jobCount)
         const editAndDelete = createEditAndDelete()
 
 
         editAndDelete.querySelector(".editButton")
         editAndDelete.querySelector(".deleteButton")
         
-        const form = this.createFormFromThis()
-        form.setAttribute("class", "form")
-        form.classList.add("subForm")
-        form.classList.add("listForm")
-        form.append(editAndDelete)
-        jobItemElement.append(form)
-        this.listHTML = jobItemElement
+        
+        jobUpdateFormElement.classList.add("listForm")
+        jobUpdateFormElement.append(editAndDelete)
+        this.updateFormHTML = jobUpdateFormElement
         this.setThisFormDisabled(true)
-        jobItemElement.addEventListener("click", this.selectListItem.bind(this))
-        jobItemElement.addEventListener("touchend", this.selectListItem.bind(this))
-        if(!Job.selectedListItemJob) jobItemElement.dispatchEvent(new Event("click", {bubbles: true}))
+        jobUpdateFormElement.addEventListener("click", this.selectListItem.bind(this))
+        jobUpdateFormElement.addEventListener("touchend", this.selectListItem.bind(this))
+        if(!Job.selectedListItemJob) jobUpdateFormElement.dispatchEvent(new Event("click", {bubbles: true}))
         
     }
 }
