@@ -8,6 +8,7 @@ class CreateController{
     }
     static startScripts(){
         document.getElementById("createButton").addEventListener("click", CreateController.createFunction)
+        document.getElementById("createButton").addEventListener("touchend", CreateController.createFunction)
         document.getElementById("createForm").addEventListener("change", CreateController.displayForm)
         const employeeRadio = document.getElementById("createForm").querySelector('input[value="Employee"]')
         employeeRadio.checked = true
@@ -36,6 +37,10 @@ class CreateController{
         for(const name of fieldNames) if(!formData.get(name)) return false
         return true
     }
+    static preventInteraction = (event) => {
+        event.preventDefault()
+        event.stopPropagation()
+    }
 }
 export const getIconElement = (className, iconName) => {
     const icon = document.createElement("span")
@@ -61,17 +66,22 @@ export const createEditAndDelete = () => {
     container.append(deleteButton)
     return container
 }
-export const createCheckAndClose = () => {
-    const container = document.createElement("div")
-    container.classList.add("checkAndClose")
-    //container.classList.add("hidden")
-
+export const setElementDisabled = (element, isDisabled) => {
+    if(isDisabled){
+        element.classList.add("disabled")
+        element.addEventListener("keydown", CreateController.preventInteraction)
+    }
+    else{
+        element.classList.remove("disabled")
+        element.removeEventListener("keydown", CreateController.preventInteraction)
+    }
+}
+export const setChildrenDisabled = (element, isDisabled) => {
+    for(const el of Array.from(element.children)) setElementDisabled(el, isDisabled)
+}
+export const createCheck = () => {
     const doneButton = createButtonForList(getIconElement("material-symbols-outlined", "check"))
-    const cancelButton = createButtonForList(getIconElement("material-symbols-outlined", "close"))
-
-    container.append(doneButton) 
-    container.append(cancelButton)
-    return container
+    return doneButton
 }
 export const checkFieldsFilled = CreateController.checkFieldsFilled
 export default CreateController

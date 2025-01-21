@@ -1,8 +1,8 @@
-import { checkFieldsFilled, getIconElement } from "./CreateController.js"
-import { createEditAndDelete } from "./CreateController.js"
+import { checkFieldsFilled, setChildrenDisabled, createEditAndDelete, setElementDisabled, createCheck } from "./CreateController.js"
 class Job{
     static jobCount = 0
     static jobList = []
+    static makingEditToList = false
     static createJobForm = document.getElementById("createJobForm")
     static selectedListItemJob = null
     static createEmployeeJobSelect = document.getElementById("createEmployeeForm").querySelector("select")
@@ -79,21 +79,18 @@ class Job{
         }
         else console.log("this job is already appended")
     }
-    createFormFromThis(){
-        const form = Job.createJobForm.cloneNode(true)
-        form.id = ""
-        form.className = ""
-        const formData = new FormData(form)
+    fillFormWithThis(jobFormElement){
+        const formData = new FormData(jobFormElement)
         formData.append("job", this.name)
         formData.append("points", this.points)
         for(const [name, value] of formData.entries()){
-            form.querySelector("input[name='"+name+"']").value = value
+            jobFormElement.querySelector("input[name='"+name+"']").value = value
         }
-        const checkbox = form.querySelector("input.checkbox")
+        const checkbox = jobFormElement.querySelector("input.checkbox")
 
         checkbox.id += "List" + Job.jobCount
         checkbox.addEventListener("change", Job.isServerUpdate)
-        const label = form.querySelector("label.checkbox")
+        const label = jobFormElement.querySelector("label.checkbox")
         label.setAttribute("for", checkbox.id)
         label.setAttribute("id", checkbox.id + "Label")
         if(this.isServer){
@@ -106,16 +103,23 @@ class Job{
             label.innerText = "no"
             label.classList.remove("checked")
         }
-        return form
-    }
-    setThisFormDisabled(isDisabled){
-        for(const el of this.updateFormHTML.querySelectorAll("label, input, div")) isDisabled ? el.classList.add("disabled") : el.classList.remove("disabled")
+        return jobFormElement
     }
     /*equalTo(otherJob){
         return Object.keys(this).every(key => this[key]===otherJob[key])
     }*/
-    displayCheckAndClose(event){
-
+    resetListItem(){
+        
+    }
+    editListItem(event){
+        const editAndDelete = this.updateFormHTML.querySelector(".editAndDelete")
+        editAndDelete.classList.add("hidden")
+        const check = this.updateFormHTML.querySelector(".checkButton")
+        check.classList.remove("hidden")
+        setChildrenDisabled(this.updateFormHTML, false)
+        this.updateFormHTML.classList.add("editing")
+        this.updateFormHTML.classList.remove("selectedListItem")
+        this.updateFormHTML.querySelector("input").focus()
     }
     updateListItem(event){
 
@@ -127,13 +131,19 @@ class Job{
         if(Job.selectedListItemJob&&Job.selectedListItemJob.updateFormHTML.contains(event.target)) return
         const editAndDelete = this.updateFormHTML.querySelector(".editAndDelete")
         this.updateFormHTML.classList.add("selectedListItem")
-        editAndDelete.classList.remove("disabled")
-        //this.setThisFormDisabled(false)
-        //editAndDelete.classList.remove("hidden")
+        setElementDisabled(editAndDelete, false)
+        setChildrenDisabled(editAndDelete, false)
         if(Job.selectedListItemJob){
             Job.selectedListItemJob.updateFormHTML.classList.remove("selectedListItem")
-            Job.selectedListItemJob.setThisFormDisabled(true)
-            //Job.selectedListItemJob.updateFormHTML.querySelector(".editAndDelete").classList.add("hidden")
+            if(Job.selectedListItemJob.updateFormHTML.classList.contains("editing")){
+                console.log("switched while editing")
+                Job.selectedListItemJob.fillFormWithThis(Job.selectedListItemJob.updateFormHTML)
+                Job.selectedListItemJob.updateFormHTML.classList.remove("editing")
+                Job.selectedListItemJob.updateFormHTML.querySelector(".editAndDelete").classList.remove("hidden")
+                Job.selectedListItemJob.updateFormHTML.querySelector(".checkButton").classList.add("hidden")
+            }
+            setChildrenDisabled(Job.selectedListItemJob.updateFormHTML, true)
+            setChildrenDisabled(Job.selectedListItemJob.updateFormHTML.querySelector(".editAndDelete"), true)
         } 
         Job.selectedListItemJob = this
     }
@@ -144,19 +154,25 @@ class Job{
         jobOptionElement.innerText=this.name + "(" +this.points +")"
         this.optionHTML = jobOptionElement
 
-        const jobUpdateFormElement = this.createFormFromThis()
+        const jobUpdateFormElement = this.fillFormWithThis(Job.createJobForm.cloneNode(true))
+        jobUpdateFormElement.className = ""
         jobUpdateFormElement.setAttribute("id", "jobUpdateForm"+Job.jobCount)
         const editAndDelete = createEditAndDelete()
+        const check = createCheck()
+        check.classList.add("hidden")
 
-
-        editAndDelete.querySelector(".editButton")
-        editAndDelete.querySelector(".deleteButton")
+        const edit = editAndDelete.querySelector(".editButton")
+        const del = editAndDelete.querySelector(".deleteButton")
         
         
         jobUpdateFormElement.classList.add("listForm")
         jobUpdateFormElement.append(editAndDelete)
+        jobUpdateFormElement.append(check)
+
         this.updateFormHTML = jobUpdateFormElement
-        this.setThisFormDisabled(true)
+        setChildrenDisabled(this.updateFormHTML, true)
+        edit.addEventListener("click", this.editListItem.bind(this))
+        edit.addEventListener("touchend", this.editListItem.bind(this))
         jobUpdateFormElement.addEventListener("click", this.selectListItem.bind(this))
         jobUpdateFormElement.addEventListener("touchend", this.selectListItem.bind(this))
         if(!Job.selectedListItemJob) jobUpdateFormElement.dispatchEvent(new Event("click", {bubbles: true}))
