@@ -20,11 +20,11 @@ body {
 }
 
 .subForm label:not(.checkbox),
-.listForm label:not(.checkbox){
+.updateForm label:not(.checkbox){
     display: none;
 }
 .subForm input.checkbox,
-.listForm input.checkbox{
+.updateForm input.checkbox{
     display: none;
 }
 .form{
@@ -109,27 +109,29 @@ label.checkbox{
 }
 .editAndDelete{
     display: flex;
-    height: fit-content;
+    
+}
+.editAndDelete button, .checkButton{
+    padding: 0;
+    margin: 0;
 }
 .editAndDelete button{
     width: 50%;
-    padding: 0;
-    padding-top: 5%;
-    margin: 0;
 }
 #lists{
     display: grid;
-    grid-template-columns: 3fr 2fr;
-
+    grid-template-columns: 1fr 1fr;
 }
 #lists h4{
     text-align: center;
     border: 1px, solid, rgb(86, 86, 86);
-    width: 50%;
     flex: 1;
 }
 #jobListContainer{
-    grid-area: 2/2/3/3;
+    grid-area: 1/1/2/2;
+}
+#employeeListContainer{
+    grid-area: 2/1/3/3;
 }
 #lists > div{
     border: 1px, solid, rgb(86, 86, 86);
@@ -141,9 +143,9 @@ ul,
 #lists h4{
     margin: 0;
     padding: 0;
+    width: 100%;
 }
-.listForm{
-    grid-area: 2/2/3/3;
+.updateForm{
     width: 100%;
     display: grid;
     grid-template-columns: 2fr .5fr 2fr 2fr;
@@ -151,9 +153,9 @@ ul,
     border-left: 0;
     border-right: 0;
 }
-.listForm label.checkbox,
-.listForm input,
-.listForm select,
+.updateForm label.checkbox,
+.updateForm input,
+.updateForm select,
 .editButton,
 .deleteButton{
     box-sizing: border-box;
@@ -161,24 +163,29 @@ ul,
     color: rgba(255, 255, 255, .5);
     background-color: rgba(8, 8, 8, 1);
     border-top: 0;
+    padding: 0;
     border-bottom: 0;
     border-left: 0;
+    margin: 0;
     text-align: center;
     font-size: 100%;
 }
 .material-symbols-outlined{
+    pointer-events: none;
+    padding-top: 4px;
+    height: min-content;
     color: rgba(255, 255, 255, 1);
 }
 .disabled .material-symbols-outlined{
     color: rgba(255, 255, 255, .25);
 }
-.selectedListItem .editButton{
+.selectedListForm .editButton{
     background-color: rgb(112, 87, 55);
 }
 .editButton:hover{
     background-color: rgb(70, 55, 34);
 }
-.selectedListItem .deleteButton{
+.selectedListForm .deleteButton{
     background-color: rgb(158, 47, 47);
 }
 .deleteButton:hover{
@@ -195,11 +202,11 @@ ul,
 .editButton:active{
     background-color: rgb(8, 8, 8);
 }
-.selectedListItem {
+.selectedListForm {
     border-color: white;
 }
 
-.selectedListItem label.checkbox {
+.selectedListForm label.checkbox {
     border: 1px solid rgba(255, 255, 255, 1);
     border-left: 0;
     border-top: 0;
@@ -212,7 +219,9 @@ ul,
 .editing button{
     color: rgba(255, 255, 255, 1);
     border: 1px solid white;
-    border-right: 0;
+    border-left: 0;
+    border-top: 0;
+    border-bottom: 0;
     outline: none;
 
 }

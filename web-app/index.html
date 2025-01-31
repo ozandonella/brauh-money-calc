@@ -20,31 +20,25 @@
                 <label for="checkoutRadio">Checkout</label>
             </form>   
             <button type="button" id="createButton">Create</button>
-            <form id="createEmployeeForm" class="form subForm">
+            <form id="createEmployeeForm" class="form subForm" data-form="employee">
                 <input type="text" name="name" value="" placeholder="Name">
                 <select name="job"></select>
                 <input type="number" name="hours" value="" placeholder="Hours" min="0" step=".01">
                 <input type="number" class="employeeCheckoutInput" name="checkout" placeholder="Checkout" value="">
             </form>
         
-            <form id="createJobForm" class="form subForm hidden">
+            <form id="createJobForm" class="form subForm hidden" data-form="job">
                 <input type="text" name="name" placeholder="Name">
                 <input type="number" name="points" placeholder="Points" step=".05" value="" min="0.0" max="4.0">
                 <label id="isServerLabel" class="checkbox checked" for="isServer">Server: yes</label><input class="checkbox" type="checkbox" id="isServer" name="isServer" checked>
             </form>
         
-            <form id="createCheckoutForm" class="form subForm hidden">
+            <form id="createCheckoutForm" class="form subForm hidden" data-form="checkout">
                 <input type="text" name="name" value="" placeholder="Name">
                 <input type="number" id="checkoutCheckout" name="checkout" placeholder="Amount" value="" min="0.0" step=".01">
             </form>
         </section>
         <section id="lists">
-            <div id="employeeListContainer">
-                <h4>Employee List</h4>
-                <ul id="employeeList">
-                    
-                </ul>
-            </div>
             <div id="checkoutListContainer">
                 <h4>Checkout List</h4>
                 <ul id="checkoutList">
@@ -57,6 +51,13 @@
     
                 </ul>
             </div>
+            <div id="employeeListContainer">
+                <h4>Employee List</h4>
+                <ul id="employeeList">
+                    
+                </ul>
+            </div>
+            
         </section>
     </body>
 </html>

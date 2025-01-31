@@ -1,12 +1,16 @@
+import UpdateForm from "./UpdateForm.js";
 import Job from "./Job.js";
 import Employee from "./Employee.js";
 import Checkout from "./Checkout.js";
+import {updateFormHandler} from "./EventHandler.js";
 class CreateController{
     constructor(){
         CreateController.startScripts()
         
     }
     static startScripts(){
+        updateFormHandler.appendTo(document.getElementById("lists"))
+        console.log(UpdateForm.UpdateFormHandler)
         document.getElementById("createButton").addEventListener("click", CreateController.createFunction)
         document.getElementById("createButton").addEventListener("touchend", CreateController.createFunction)
         document.getElementById("createForm").addEventListener("change", CreateController.displayForm)
@@ -48,40 +52,6 @@ export const getIconElement = (className, iconName) => {
     icon.innerText = iconName
     return icon
 }
-export const createButtonForList = (iconElement) => {
-    const button = document.createElement("button")
-    button.append(iconElement)
-    button.setAttribute("class", iconElement.innerText+"Button")
-    button.setAttribute("type", "button")
-    return button
-}
-export const createEditAndDelete = () => {
-    const container = document.createElement("div")
-    container.classList.add("editAndDelete")
-
-    const deleteButton = createButtonForList(getIconElement("material-symbols-outlined", "delete"))
-    const editButton = createButtonForList(getIconElement("material-symbols-outlined", "edit"))
-
-    container.append(editButton) 
-    container.append(deleteButton)
-    return container
-}
-export const setElementDisabled = (element, isDisabled) => {
-    if(isDisabled){
-        element.classList.add("disabled")
-        element.addEventListener("keydown", CreateController.preventInteraction)
-    }
-    else{
-        element.classList.remove("disabled")
-        element.removeEventListener("keydown", CreateController.preventInteraction)
-    }
-}
-export const setChildrenDisabled = (element, isDisabled) => {
-    for(const el of Array.from(element.children)) setElementDisabled(el, isDisabled)
-}
-export const createCheck = () => {
-    const doneButton = createButtonForList(getIconElement("material-symbols-outlined", "check"))
-    return doneButton
-}
+export const preventInteraction = CreateController.preventInteraction 
 export const checkFieldsFilled = CreateController.checkFieldsFilled
 export default CreateController
