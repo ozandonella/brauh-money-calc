@@ -24,13 +24,14 @@ class UpdateForm{
         this.editAndDeleteHTML.append(editButton) 
         this.editAndDeleteHTML.append(deleteButton)
         
-        this.HTML.append(this.editAndDeleteHTML)
-        this.HTML.append(this.updateButtonHTML)
+        this.HTML.prepend(this.editAndDeleteHTML)
+        this.HTML.prepend(this.updateButtonHTML)
+
         updateFormHandler.addElement("check"+this.className+this.id, this.updateFunction, this.updateButtonHTML)
         updateFormHandler.addElement("delete"+this.className+this.id, this.deleteFunction, deleteButton)
         updateFormHandler.addElement("edit"+this.className+this.id, this.openEdit, editButton)
         updateFormHandler.addElement("select"+this.className+this.id, this.select, this.HTML)
-        console.log(Object.entries(updateFormHandler).length)
+
         UpdateForm.setChildrenDisabled(this.HTML, true)
     }
    

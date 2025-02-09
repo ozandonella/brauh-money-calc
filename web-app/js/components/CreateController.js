@@ -1,8 +1,8 @@
-import UpdateForm from "./UpdateForm.js";
 import Job from "./Job.js";
 import Employee from "./Employee.js";
 import Checkout from "./Checkout.js";
 import {updateFormHandler} from "./EventHandler.js";
+
 class CreateController{
     constructor(){
         CreateController.startScripts()
@@ -10,7 +10,6 @@ class CreateController{
     }
     static startScripts(){
         updateFormHandler.appendTo(document.getElementById("lists"))
-        console.log(UpdateForm.UpdateFormHandler)
         document.getElementById("createButton").addEventListener("click", CreateController.createFunction)
         document.getElementById("createButton").addEventListener("touchend", CreateController.createFunction)
         document.getElementById("createForm").addEventListener("change", CreateController.displayForm)
@@ -19,6 +18,7 @@ class CreateController{
         employeeRadio.dispatchEvent(new Event("change", {bubbles: true}))
         Job.addListeners()
         Job.addBaseJobs()
+        Checkout.addBaseCheckouts()
     }
     static displayForm(event){
         if(event.target.name!=="createRadio") return
@@ -34,7 +34,7 @@ class CreateController{
         const createTarget = new FormData(createFormElement).get("createRadio")
         if(createTarget==="Employee") Employee.formCreate()
         else if(createTarget==="Job") Job.formCreate()
-        else Checkout.createCheckout()
+        else Checkout.formCreate()
     }
     static checkFieldsFilled(formElement, fieldNames){
         const formData = new FormData(formElement)

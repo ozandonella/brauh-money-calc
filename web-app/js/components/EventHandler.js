@@ -3,8 +3,6 @@ class EventHandler{
         this.eventType = eventType
     }
     handle = (event) => {
-        console.log(this)
-        console.log(event.target)
         if(event.target.dataset.event!==this.eventType) return
         const action = event.target.dataset.action
         if(!this[action]){

@@ -1,5 +1,6 @@
 import {checkFieldsFilled} from "./CreateController.js"
 import UpdateForm from "./UpdateForm.js"
+import {employeeList} from "./Employee.js"
 class Job{
     static jobCount = 0
     static jobList = []
@@ -13,11 +14,10 @@ class Job{
         this.isServer = isServer
         this.optionHTML = null
         this.updateForm = null
-        
+        this.employeeWorkHours = 0
+        Job.jobList.push(this)
         this.setHTML()
         Job.createEmployeeJobSelect.append(this.optionHTML)
-        document.getElementById("jobList").append(this.updateForm.HTML)
-        Job.jobList.push(this)
         Job.jobCount++
     }
     static addListeners(){
@@ -30,6 +30,7 @@ class Job{
         new Job(fromData.get("name"), fromData.get("points"), fromData.get("isServer"))
         Job.createEmployeeJobSelect.selectedIndex = Job.createEmployeeJobSelect.options.length - 1
         Job.createJobForm.reset()
+        Job.jobUpdate()
         const employeeRadio = document.getElementById("createForm").querySelector('input[value="Employee"]')
         employeeRadio.checked = true
         employeeRadio.dispatchEvent(new Event("change", {bubbles: true})) 
@@ -79,7 +80,9 @@ class Job{
         }
        label.innerText = text
     }
-    
+    static printWorkHours(){
+        jobList.forEach((job) => console.log(job.name +" "+job.employeeWorkHours))
+    }
     fillOptionWithThis(jobOptionHtml){
         jobOptionHtml.innerText = this.name+"("+this.points+")"
         jobOptionHtml.value=this.name
@@ -110,6 +113,9 @@ class Job{
             label.classList.remove("checked")
         }
     }
+    updateEmployeeWorkHours(){
+        
+    }
     fillFunction = () => {
         this.updateForm.HTML.querySelector("input[name='name']").value = this.name
         this.updateForm.HTML.querySelector("input[name='points']").value = this.points
@@ -135,24 +141,37 @@ class Job{
         this.isServer = this.updateForm.HTML.querySelector("input.checkbox").checked
         this.fillOptionWithThis(this.optionHTML)
         /*UPDATE SERVER LIST LOGIC*/
+        employeeList.forEach((employee) => {
+            const currOption = employee.updateForm.HTML.querySelector("[data-job-option = '"+this.id+"']")
+            currOption.innerText = this.name + "(" + this.points + ")"
+        })
+        TipsManager.updateTips()
         this.updateForm.closeEdit()
-        console.log(Job.jobList)
         Job.jobUpdate()
     }
     deleteFunction = () => {
-        if(Job.jobList.length===1){
+        if(Job.jobList.length === 1){
             console.log("must have at least one job")
             return
         }
-        this.optionHTML.remove()
         this.updateForm.HTML.remove()
-        /*UDATE EMPLOYEE JOBS*/
+        this.optionHTML.remove()
 
-        if(!Job.findSelectedOptionJob()) Job.createEmployeeJobSelect.selectedIndex=0;
-        var ind = Job.jobList.indexOf(this)
+        /*UDATE EMPLOYEE JOBS*/
+        employeeList.forEach((employee) => {
+            const currSelect = employee.updateForm.HTML.querySelector("select")
+            currSelect.querySelector("[data-job-option = '"+this.id+"']").remove()
+            if(employee.job.id === this.id){
+                this.employeeWorkHours -= employee.hours
+                employee.job = Job.jobList.find((job) => job.id == currSelect.selectedOptions[0].dataset.jobOption)
+                employee.job.employeeWorkHours += employee.hours
+            } 
+        })
+        if(!Job.findSelectedOptionJob()) Job.createEmployeeJobSelect.selectedIndex = 0;
+        const ind = Job.jobList.indexOf(this)
         Job.jobList.splice(ind, 1)
-        ind = Math.min(ind, Job.jobList.length-1)
-        Job.jobList[ind].updateForm.select()
+        Job.jobList[Math.min(ind, Job.jobList.length-1)].updateForm.select()
+        TipsManager.updateTips()
         Job.jobUpdate()
     }
     setHTML(){
@@ -161,26 +180,20 @@ class Job{
             option.setAttribute("data-job-option", this.id)
             this.fillOptionWithThis(option)
             return option
-
-            /*
-            WAS HERE 1/22
-
-            working on creating a way to update all job option elements in the dom 
-            (employee update form select elements and employee create form select)
-            */
         }
-
+        employeeList.forEach((employee) => employee.updateForm.HTML.querySelector("select").append(createJobOptionFromthis()))
         const jobOptionElement = createJobOptionFromthis()
         this.optionHTML = jobOptionElement
 
         this.updateForm = new UpdateForm(this.updateFunction, this.deleteFunction, this.fillFunction, "Job", this.id, Job.createJobForm.cloneNode(true))
         this.setFormWithThis(this.updateForm.HTML)
-        this.updateForm.HTML.setAttribute("class","updateForm")
-        
-        
+        this.updateForm.HTML.setAttribute("class","jobUpdateForm")
+        this.updateForm.HTML.classList.add("updateFormInputStyle")        
+        document.getElementById("jobList").append(this.updateForm.HTML)
         if(!UpdateForm.selectedUpdateForm) this.updateForm.HTML.dispatchEvent(new Event("click", {bubbles: true}))
         
     }
 }
 export const findSelectedOptionJob = Job.findSelectedOptionJob
+export const jobList = Job.jobList
 export default Job
