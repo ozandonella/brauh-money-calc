@@ -12,6 +12,7 @@ body {
     position: fixed;
     width: 100%;
     background-color: rgb(48, 48, 48);
+    border-bottom: 2px solid rgb(86, 86, 86);
     display: grid;
     row-gap: 20px;
     grid-template-rows: 4fr 5fr;
@@ -43,12 +44,19 @@ label.checkbox,
 .form select{
     box-sizing: border-box;
     border: 2px solid rgb(86, 86, 86);
-    border-left: 0;
+    border-left: 1px solid rgb(86, 86, 86);
+    border-right: 1px solid rgb(86, 86, 86);
+    border-bottom: 0;
     text-align: center;
     width: 100%;
     color: white;
     font-size: 120%;
     background-color: rgb(8, 8, 8);
+    outline: none;
+} 
+.form input:focus,
+.form select:focus{
+    border: 1px solid white;
 }
 label.checkbox{
     display: flex;
@@ -56,11 +64,7 @@ label.checkbox{
     justify-content: center;
     align-items: center;
 }
-.form input:focus,
-.form select:focus{
-    border: 2px solid white;
-    outline: none;
-}
+
 #createForm {
     text-align: center;
     grid-area: 1/2/1/3;
@@ -86,12 +90,12 @@ label.checkbox{
 
 #createButton{
     background-color: rgb(8, 8, 8);
-    border: 3px, solid rgb(86, 86, 86);
+    border: 3px solid rgb(86, 86, 86);
     border-left: 0;
     border-top: 0;
+    border-bottom: 0;
     grid-area: 1/1/3/2;
     font-size: 150%;
-    font-family: Verdana;
     background-color: rgb(62, 148, 75);
     color: white;
 }
@@ -104,13 +108,12 @@ label.checkbox{
     background-color: rgb(62, 148, 75);
     border-color: white;
 }
-#lists {
-    padding-top: 162px;
-}
+
 .editAndDelete{
     display: flex;
 }
-.editAndDelete button, .checkButton{
+.editAndDelete button, 
+.checkButton{
     padding: 0;
     margin: 0;
     border: 0;
@@ -121,18 +124,37 @@ label.checkbox{
     box-sizing: border-box;
     width: 50%;
 }
-#lists{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+#sideListButton{
+    color: white;
+    background-color: rgb(31, 95, 127);
+    border: 1px solid rgb(86, 86, 86);
+    border-left: none;
+    padding: 0;
+    height: 35px;
+    font-size: 18px;
 }
-#jobListContainer{
-    grid-area: 1/1/2/2;
+#sideListButton:hover{
+    background-color: rgb(21, 56, 74);
+}
+#sideListButton:active{
+    background-color: rgb(0, 0, 0);
+}
+#lists{
+    padding-top: 90px;
+    display: flex;
+}
+#sideList{
+    flex: 1;
+    min-width: 230px;
+    flex-shrink: 0;
 }
 #employeeListContainer{
-    grid-area: 2/1/3/3;
+    flex: 3;
+
 }
 #lists > div{
     border: 1px, solid, rgb(86, 86, 86);
+    height: fit-content;
     display: flex;
     flex-direction: column;
     justify-items: start;
@@ -151,19 +173,22 @@ ul{
 }
 .employeeUpdateForm,
 .jobUpdateForm,
-.checkoutUpdateForm{ 
+.checkoutUpdateForm,
+#checkoutListHeader,
+#jobListHeader,
+#employeeListHeader{ 
     box-sizing: border-box;
     height: 35px;
     width: 100%;
     display: grid;
 }
-.checkoutUpdateForm{
-    grid-template-columns: 70px 3fr 1fr;
+.checkoutUpdateForm, #checkoutListHeader{
+    grid-template-columns: 70px 3fr 70px;
 }
-.employeeUpdateForm{
+.employeeUpdateForm, #employeeListHeader{
     grid-template-columns: 70px 2fr 2fr 1fr 1fr;
 }
-.jobUpdateForm{
+.jobUpdateForm, #jobListHeader{
     grid-template-columns: 70px 2fr 1fr 1fr;
 }
 .updateFormInputStyle label.checkbox,
@@ -173,14 +198,36 @@ ul{
 .checkButton{
     box-sizing: border-box;
     width: 100%;
-    border: 1px solid rgba(86, 86, 86, .5);
+    border: 1px solid rgb(86, 86, 86);
     border-left: none;
     color: rgba(255, 255, 255, .5);
-    background-color: rgba(8, 8, 8, 1);
+    background-color: rgb(8, 8, 8);
     padding: 0;
     margin: 0;
     text-align: center;
-    font-size: 100%;
+    font-size: 18px;
+}
+P{  
+    font-size: 18px;
+    height: 35px;
+    width: 100%;
+    margin: 0;
+    padding: 5px 0 0 0;
+    box-sizing: border-box;
+    border: 1px solid rgb(86, 86, 86);
+    border-left: none;
+    text-align: center;
+    
+}
+#jobListContainer p,
+#checkoutListContainer p{
+    background-color: rgb(31, 95, 127);
+}
+#checkoutListContainer p[id = "totalTips"]{
+    background-color: rgb(8,8,8);
+}
+#employeeListContainer p{
+    background-color: rgb(48, 48, 48);
 }
 .material-symbols-outlined{
     pointer-events: none;
@@ -240,6 +287,7 @@ label.checkbox.checked{
     display: flex;
     justify-content: center;
     align-items: center;
+    font-size: 18px;
     border: 1px solid rgb(86, 86, 86);
     background-color: rgb(62, 148, 75);
 }

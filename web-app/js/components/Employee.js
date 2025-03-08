@@ -5,12 +5,12 @@ import UpdateForm from "./UpdateForm.js";
 import TipsManager from "./TipsManager.js";
 class Employee{
     static employeeCount = 0;
-    static createEmployeemployeeForm = document.getElementById("createEmployeeForm")
+    static createEmployeeForm = document.getElementById("createEmployeeForm")
     static employeeList = []
     constructor(name, job, hours){
         this.name = name
         this.job = job
-        this.hours = hours
+        this.hours = Math.floor(hours*100)/100
         this.id = Employee.employeeCount
         Employee.employeeList.push(this)
         Employee.employeeCount++
@@ -22,13 +22,13 @@ class Employee{
         TipsManager.updateTips()
     }
     static formCreate(){
-        if(!Employee.validateEmployee(Employee.createEmployeemployeeForm)) return
-        const formData = new FormData(Employee.createEmployeemployeeForm)
+        if(!Employee.validateEmployee(Employee.createEmployeeForm)) return
+        const formData = new FormData(Employee.createEmployeeForm)
         const employee = new Employee(formData.get("name"), findSelectedOptionJob(), Number(formData.get("hours")))
-        if(employee.job.isServer){
-            console.log("creating checkout...")
-            new Checkout(employee.name, Number(formData.get("checkout")))
-        }
+        if(employee.job.isServer) new Checkout(employee.name, Number(formData.get("checkout")))
+        const selectInd = Employee.createEmployeeForm.querySelector("select").selectedIndex
+        Employee.createEmployeeForm.reset()
+        Employee.createEmployeeForm.querySelector("select").selectedIndex = selectInd
     }
     
     static validateEmployee(employeeformElement){
@@ -44,33 +44,31 @@ class Employee{
         }
         return true
     }
+    static getCreateForm(){
+        return Employee.createEmployeeForm
+    }
     setTips(tips){
         this.tips = tips
-        tips*=100
-        console.log(tips%10)
-        let tipString = "$"+tips/100
-        console.log(tipString)
-        if(tips % 100 === 0) tipString += ".00"
-        else if(tips % 10 === 0) tipString += "0"
-        this.updateForm.HTML.querySelector(".tipOut").innerText = tipString
+        this.updateForm.HTML.querySelector(".tipOut").innerText = "$"+tips
     }
     setFormWithThis(employeeFormElement){
         employeeFormElement.id = "Employee" + this.id
         const selectElement = employeeFormElement.querySelector("select")
         selectElement.querySelector("[data-job-option = '"+this.job.id+"']").selected = true
         employeeFormElement.querySelector("input[name='name']").value=this.name
-        employeeFormElement.querySelector("input[name='hours']").value=this.hours
+        employeeFormElement.querySelector("input[name='hours']").value=TipsManager.getHundredthsRep(this.hours)
     
     }
     fillFunction = () => {
         this.updateForm.HTML.querySelector("input[name='name']").value=this.name
-        this.updateForm.HTML.querySelector("input[name='hours']").value=this.hours
+        this.updateForm.HTML.querySelector("input[name='hours']").value=TipsManager.getHundredthsRep(this.hours)
         this.updateForm.HTML.querySelector("option[data-job-option = '"+this.job.id+"']").selected = true
     }
     updateFunction = () => {
         this.name = this.updateForm.HTML.querySelector("input[name='name']").value
         this.job.employeeWorkHours -= this.hours
         this.hours = Number(this.updateForm.HTML.querySelector("input[name='hours']").value)
+        this.updateForm.HTML.querySelector("input[name='hours']").value=TipsManager.getHundredthsRep(this.hours)
         const newJobId = this.updateForm.HTML.querySelector("select").selectedOptions[0].dataset.jobOption
         this.job = jobList.find((job) => job.id == newJobId)
         this.job.employeeWorkHours += this.hours
@@ -88,7 +86,7 @@ class Employee{
         //UPDATE TIPS
     }
     setHTML(){
-        const updateFormHTML = Employee.createEmployeemployeeForm.cloneNode(true)
+        const updateFormHTML = Employee.createEmployeeForm.cloneNode(true)
         this.setFormWithThis(updateFormHTML)
         this.updateForm = new UpdateForm(this.updateFunction, this.deleteFunction, this.fillFunction, "Employee", this.id, updateFormHTML)
         this.updateForm.HTML.setAttribute("class","updateFormInputStyle")

@@ -1,6 +1,7 @@
 import {checkFieldsFilled} from "./CreateController.js"
 import UpdateForm from "./UpdateForm.js"
 import {employeeList} from "./Employee.js"
+import TipsManager from "./TipsManager.js";
 class Job{
     static jobCount = 0
     static jobList = []
@@ -82,6 +83,9 @@ class Job{
     }
     static printWorkHours(){
         jobList.forEach((job) => console.log(job.name +" "+job.employeeWorkHours))
+    }
+    static getCreateForm(){
+        return Job.createJobForm
     }
     fillOptionWithThis(jobOptionHtml){
         jobOptionHtml.innerText = this.name+"("+this.points+")"

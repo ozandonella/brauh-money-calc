@@ -39,25 +39,27 @@
             </form>
         </section>
         <section id="lists">
-            <div id="checkoutListContainer">
-                <h4>Checkout List</h4>
-                <ul id="checkoutList">
-                    
-                </ul>
-            </div>
-            <div id="jobListContainer">
-                <h4>Job List</h4>
-                <ul id="jobList">
-    
-                </ul>
-            </div>
             <div id="employeeListContainer">
-                <h4>Employee List</h4>
+                <div id="employeeListHeader"><p>EDIT</p><p>NAME</p><p>JOB</p><p>HOURS</p><p>TIPS</p></div>
                 <ul id="employeeList">
                     
                 </ul>
             </div>
-            
+            <div id="sideList">
+                <div id="checkoutListContainer">
+                    <div id="checkoutListHeader"><p>EDIT</p><p>NAME</p><p>AMNT</p></div>
+                    <ul id="checkoutList">
+                        
+                    </ul>
+                    <p id="totalTips"></p>
+                </div>
+                <div id="jobListContainer" class="hidden">
+                    <div id="jobListHeader"><p>EDIT</p><p>JOB</p><p>PNTS</p><p>SRVR</p></div>
+                    <ul id="jobList">
+                    </ul>
+                </div>
+                <button type="button" id="sideListButton">Show Jobs</button>
+            </div>
         </section>
     </body>
 </html>

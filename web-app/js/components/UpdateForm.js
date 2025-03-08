@@ -1,5 +1,5 @@
-import {getIconElement, preventInteraction} from "./CreateController.js"
-import { updateFormHandler } from "./EventHandler.js"
+import { getIconElement } from "./CreateController.js"
+import { clickHandler, touchenedHandler} from "./EventHandler.js"
 class UpdateForm{
     static selectedUpdateForm
     constructor(updateFunction, deleteFunction, fillFunction, className, id,  formElement){
@@ -27,10 +27,15 @@ class UpdateForm{
         this.HTML.prepend(this.editAndDeleteHTML)
         this.HTML.prepend(this.updateButtonHTML)
 
-        updateFormHandler.addElement("check"+this.className+this.id, this.updateFunction, this.updateButtonHTML)
-        updateFormHandler.addElement("delete"+this.className+this.id, this.deleteFunction, deleteButton)
-        updateFormHandler.addElement("edit"+this.className+this.id, this.openEdit, editButton)
-        updateFormHandler.addElement("select"+this.className+this.id, this.select, this.HTML)
+        clickHandler.addElement("check"+this.className+this.id, this.updateFunction, this.updateButtonHTML)
+        clickHandler.addElement("delete"+this.className+this.id, this.deleteFunction, deleteButton)
+        clickHandler.addElement("edit"+this.className+this.id, this.openEdit, editButton)
+        clickHandler.addElement("select"+this.className+this.id, this.select, this.HTML)
+        
+        touchenedHandler.addElement("check"+this.className+this.id, this.updateFunction, this.updateButtonHTML)
+        touchenedHandler.addElement("delete"+this.className+this.id, this.deleteFunction, deleteButton)
+        touchenedHandler.addElement("edit"+this.className+this.id, this.openEdit, editButton)
+        touchenedHandler.addElement("select"+this.className+this.id, this.select, this.HTML)
 
         UpdateForm.setChildrenDisabled(this.HTML, true)
     }
@@ -76,7 +81,9 @@ class UpdateForm{
             this.updateButtonHTML.classList.add("hidden")
         }
     }
-    
+    static unselectCurrentForm(){
+        if(UpdateForm.selectedUpdateForm) UpdateForm.selectedUpdateForm.unselect()
+    }
     static createUpdateFormButton(iconElement){
         const button = document.createElement("button")
         button.append(iconElement)
@@ -85,17 +92,13 @@ class UpdateForm{
         return button
     }
     static setElementDisabled(element, isDisabled){
-        if(isDisabled){
-            element.classList.add("disabled")
-            element.addEventListener("keydown", preventInteraction)
-        }
-        else{
-            element.classList.remove("disabled")
-            element.removeEventListener("keydown", preventInteraction)
-        }
+        if(isDisabled) element.classList.add("disabled")
+        else element.classList.remove("disabled")  
     }
     static setChildrenDisabled(element, isDisabled){
         for(const el of Array.from(element.children)) UpdateForm.setElementDisabled(el, isDisabled)
     }
 }
+export const selectedUpdateForm = UpdateForm.selectedUpdateForm
+export const unselectCurrentForm = UpdateForm.unselectCurrentForm
 export default UpdateForm

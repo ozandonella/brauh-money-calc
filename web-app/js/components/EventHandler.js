@@ -3,10 +3,10 @@ class EventHandler{
         this.eventType = eventType
     }
     handle = (event) => {
-        if(event.target.dataset.event!==this.eventType) return
-        const action = event.target.dataset.action
+        if(!event.target.dataset[this.eventType]) return
+        const action = event.target.dataset[this.eventType]
         if(!this[action]){
-            console.log(action + " for event "+this.eventType + " does not exist")
+            console.log("'" + action + "' for event: "+this.eventType + " does not exist")
             return
         }
         this[action]()
@@ -23,9 +23,9 @@ class EventHandler{
     }
 
     static setEventData(eventName, actionName, element){
-        element.setAttribute("data-event", eventName)
-        element.setAttribute("data-action", actionName)
+        element.setAttribute("data-"+eventName, actionName)
     }
 }
-export const updateFormHandler = new EventHandler("click")
+export const clickHandler = new EventHandler("click")
+export const touchenedHandler = new EventHandler("touchend")
 export default EventHandler
