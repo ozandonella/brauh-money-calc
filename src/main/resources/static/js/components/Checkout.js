@@ -7,8 +7,9 @@ class Checkout{
     static totalTipsElement = document.getElementById("totalTips")
     static checkoutList = []
     constructor(name, amount){
+        amount = Math.floor(amount*100)/100
         this.name = name
-        this.amount = Math.floor(amount*100)/100
+        this.amount = amount
         this.id = Checkout.checkoutCount
         this.updateForm = null
         this.setHTML()
@@ -34,7 +35,7 @@ class Checkout{
     updateFunction = () => {
         if(!checkFieldsFilled(this.updateForm.HTML, ["name","amount"])) return
         this.name = this.updateForm.HTML.querySelector("input[name='name']").value
-        this.amount = Number(this.updateForm.HTML.querySelector("input[name='amount']").value)
+        this.amount = Math.floor(Number(this.updateForm.HTML.querySelector("input[name='amount']").value)*100)/100
         this.updateForm.HTML.querySelector("input[name='amount']").value = TipsManager.getHundredthsRep(this.amount)
         this.updateForm.closeEdit()
         TipsManager.updateTips()

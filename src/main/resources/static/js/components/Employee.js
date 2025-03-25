@@ -8,9 +8,10 @@ class Employee{
     static createEmployeeForm = document.getElementById("createEmployeeForm")
     static employeeList = []
     constructor(name, job, hours){
+        hours = Math.floor(hours*100)/100
         this.name = name
         this.job = job
-        this.hours = Math.floor(hours*100)/100
+        this.hours = hours
         this.id = Employee.employeeCount
         Employee.employeeList.push(this)
         Employee.employeeCount++
@@ -67,7 +68,7 @@ class Employee{
     updateFunction = () => {
         this.name = this.updateForm.HTML.querySelector("input[name='name']").value
         this.job.employeeWorkHours -= this.hours
-        this.hours = Number(this.updateForm.HTML.querySelector("input[name='hours']").value)
+        this.hours = Math.floor(100*Number(this.updateForm.HTML.querySelector("input[name='hours']").value))/100
         this.updateForm.HTML.querySelector("input[name='hours']").value=TipsManager.getHundredthsRep(this.hours)
         const newJobId = this.updateForm.HTML.querySelector("select").selectedOptions[0].dataset.jobOption
         this.job = jobList.find((job) => job.id == newJobId)
