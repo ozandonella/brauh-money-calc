@@ -124,19 +124,29 @@ label.checkbox{
     box-sizing: border-box;
     width: 50%;
 }
-#sideListButton{
+#sideListButton,
+#confirmButton{
     color: white;
-    background-color: rgb(31, 95, 127);
     border: 1px solid rgb(86, 86, 86);
     border-left: none;
     padding: 0;
     height: 35px;
     font-size: 18px;
 }
-#sideListButton:hover{
-    background-color: rgb(21, 56, 74);
+#sideListButton{
+    background-color: rgb(31, 95, 127);
 }
-#sideListButton:active{
+#confirmButton{
+    background-color: rgb(28, 47, 105);
+}
+#confirmButton:hover{
+    background-color: rgb(14, 24, 50)
+}
+#sideListButton:hover{
+    background-color: rgb(15, 45, 60);
+}
+#sideListButton:active,
+#confirmButton:active{
     background-color: rgb(0, 0, 0);
 }
 #lists{
@@ -227,7 +237,7 @@ P{
     background-color: rgb(8,8,8);
 }
 #employeeListContainer p{
-    background-color: rgb(48, 48, 48);
+    background-color: rgb(28, 47, 105);
 }
 .material-symbols-outlined{
     pointer-events: none;

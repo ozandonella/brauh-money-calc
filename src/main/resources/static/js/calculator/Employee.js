@@ -1,5 +1,5 @@
 import Checkout from "./Checkout.js";
-import {checkFieldsFilled} from "./CreateController.js"
+import {checkFieldsFilled, displayConfirmButton} from "./CreateController.js"
 import {findSelectedOptionJob, jobList} from "./Job.js"
 import UpdateForm from "./UpdateForm.js";
 import TipsManager from "./TipsManager.js";
@@ -19,7 +19,9 @@ class Employee{
         this.jobSelectHTML = null
         this.tips = 0
         this.job.employeeWorkHours += hours
+        displayConfirmButton()
         this.setHTML()
+
         TipsManager.updateTips()
     }
     static formCreate(){
@@ -83,6 +85,7 @@ class Employee{
         const ind = Employee.employeeList.indexOf(this)
         Employee.employeeList.splice(ind, 1)
         if(Employee.employeeList.length > 0) Employee.employeeList[Math.min(ind, Employee.employeeList.length-1)].updateForm.select()
+        displayConfirmButton()
         TipsManager.updateTips()
         //UPDATE TIPS
     }

@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/employees")
+@RequestMapping("/employees")
 public class EmployeeController {
-    private final EmployeeRepository employeeRepository;
+    final EmployeeRepository employeeRepository;
     public EmployeeController(EmployeeRepository employeeRepository){
         this.employeeRepository = employeeRepository;
     }
@@ -18,7 +18,7 @@ public class EmployeeController {
     /*
     REQUESTS
      */
-    @RequestMapping()
+    @RequestMapping("/all")
     List<Employee> findAll() {
         return employeeRepository.findAll();
     }

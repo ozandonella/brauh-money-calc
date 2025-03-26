@@ -5,7 +5,6 @@ import TipsManager from "./TipsManager.js";
 class Job{
     static jobCount = 0
     static jobList = []
-    static makingEditToList = false
     static createJobForm = document.getElementById("createJobForm")
     static createEmployeeJobSelect = document.getElementById("createEmployeeForm").querySelector("select")
     constructor(name, points, isServer){
@@ -21,6 +20,7 @@ class Job{
         Job.createEmployeeJobSelect.append(this.optionHTML)
         Job.jobCount++
     }
+    
     static addListeners(){
         Job.createEmployeeJobSelect.addEventListener("change", Job.jobUpdate)
         document.getElementById("isServer").addEventListener("change", Job.isServerUpdate)

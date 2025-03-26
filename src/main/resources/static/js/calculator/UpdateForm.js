@@ -1,5 +1,5 @@
 import { getIconElement } from "./CreateController.js"
-import { clickHandler, touchenedHandler} from "./EventHandler.js"
+import { clickHandler, touchenedHandler} from "../util/EventHandler.js"
 class UpdateForm{
     static selectedUpdateForm
     constructor(updateFunction, deleteFunction, fillFunction, className, id,  formElement){
