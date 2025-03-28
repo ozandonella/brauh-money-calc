@@ -1,7 +1,6 @@
 import CreateController from "./CreateController.js";
+import Job from "./Job.js";
+import Checkout from "./Checkout.js";
 document.addEventListener("DOMContentLoaded", () => {
-    if(sessionStorage.getItem("HTML")){
-        document.documentElement.innerHTML = sessionStorage.getItem("HTML")
-    }
-    else new CreateController()
+    new CreateController()
 })

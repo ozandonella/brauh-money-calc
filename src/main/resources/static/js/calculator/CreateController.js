@@ -29,14 +29,19 @@ class CreateController{
         employeeRadio.checked = true
         employeeRadio.dispatchEvent(new Event("change", {bubbles: true}))
         Job.addListeners()
-        Job.addBaseJobs()
-        Checkout.addBaseCheckouts()
+        if(sessionStorage.getItem("state")) CreateController.buildState()
+        else{
+            Job.addBaseJobs()
+            Checkout.addBaseCheckouts()
+        }
     }
     static saveState(){
-        sessionStorage.setItem("HTML", document.documentElement.innerHTML)
+        sessionStorage.setItem("state", "true")
     }
     static buildState(){
-        document.documentElement.innerHTML = sessionStorage.getItem("HTML")
+        Job.buildState()
+        Checkout.buildState()
+        Employee.buildState()
     }
     static confirmButtonPressed(){
         CreateController.saveState()

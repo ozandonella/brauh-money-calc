@@ -8,16 +8,11 @@ class TipsManager{
         document.getElementById("totalTips").innerText = "Tip Pool: $" + TipsManager.getHundredthsRep(totalTips/100)
         if(employeeList.length === 0) return
         const totalPointHours = Math.ceil(jobList.reduce((pointHours, job) => {return pointHours + ((job.employeeWorkHours * 100) * (job.points * 100))}, 0))
-        console.log(totalPointHours)
-        console.log("tips: "+totalTips)
         const pointHourley = ((totalTips*100)/totalPointHours) 
-        console.log("hourly for 1 point: "+pointHourley)
         let paidTotal = 0
         const tipMap = Array.from(employeeList)
         .map((employee) => {
             const trueTip = Math.floor((.0000001 + (pointHourley * (employee.job.points * 100) * (employee.hours * 100)))*1000000)
-            console.log(employee.name+": "+trueTip)
-            //console.log(employee.name + ": "+ tip)
             paidTotal += Math.floor(trueTip/10000000000)
             return {
                 emp: employee, 
@@ -27,7 +22,6 @@ class TipsManager{
         })
         .sort((key1, key2) => key2.remainder - key1.remainder)
         totalTips = Math.floor(totalTips/100)
-        console.log("extra dollars: "+(totalTips - paidTotal))
         let ind = 0
         while(paidTotal < totalTips){
             if(ind === tipMap.length) ind === 0
@@ -35,13 +29,7 @@ class TipsManager{
             paidTotal++
         }
         tipMap
-        .forEach(key => {
-            console.log("tip: " + key.tip)
-            console.log("rem: " + key.remainder)
-            key.emp.setTips(key.tip)
-        })
-        
-        console.log("tips paid: "+paidTotal)
+        .forEach(key => key.emp.setTips(key.tip))
     }
     static getHundredthsRep(amount){
         let ret = Math.floor(amount)

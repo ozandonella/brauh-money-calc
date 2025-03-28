@@ -21,8 +21,27 @@ class Employee{
         this.job.employeeWorkHours += hours
         displayConfirmButton()
         this.setHTML()
-
         TipsManager.updateTips()
+        Employee.saveState()
+    }
+    static saveState(){
+        sessionStorage.setItem("employeeList", JSON.stringify(Employee.employeeList, (key, value) => {
+            if(value instanceof Employee){
+                return {
+                    name: value.name,
+                    job: value.job.id,
+                    hours: value.hours,
+                    tips: value.tips
+                }
+            }
+            return value
+        }, 2))
+    }
+    static buildState(){
+        JSON.parse(sessionStorage.getItem("employeeList"), (key, value) => {
+            if(value && value.name) return new Employee(value.name, jobList.find((job) => job.id == value.job), value.hours)
+            return value
+        })
     }
     static formCreate(){
         if(!Employee.validateEmployee(Employee.createEmployeeForm)) return
@@ -60,7 +79,6 @@ class Employee{
         selectElement.querySelector("[data-job-option = '"+this.job.id+"']").selected = true
         employeeFormElement.querySelector("input[name='name']").value=this.name
         employeeFormElement.querySelector("input[name='hours']").value=TipsManager.getHundredthsRep(this.hours)
-    
     }
     fillFunction = () => {
         this.updateForm.HTML.querySelector("input[name='name']").value=this.name
@@ -77,6 +95,7 @@ class Employee{
         this.job.employeeWorkHours += this.hours
         TipsManager.updateTips()
         this.updateForm.closeEdit()
+        Employee.saveState()
         //UPDATE TIPS
     }
     deleteFunction = () => {
@@ -87,6 +106,7 @@ class Employee{
         if(Employee.employeeList.length > 0) Employee.employeeList[Math.min(ind, Employee.employeeList.length-1)].updateForm.select()
         displayConfirmButton()
         TipsManager.updateTips()
+        Employee.saveState()
         //UPDATE TIPS
     }
     setHTML(){

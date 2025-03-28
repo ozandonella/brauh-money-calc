@@ -16,6 +16,24 @@ class Checkout{
         Checkout.checkoutList.push(this)
         Checkout.checkoutCount++
         TipsManager.updateTips()
+        Checkout.saveState()
+    }
+    static saveState(){
+        sessionStorage.setItem("checkoutList", JSON.stringify(Checkout.checkoutList, (key, value) => {
+            if(value instanceof Checkout){
+                return {
+                    name: value.name,
+                    amount: value.amount
+                }
+            }
+            return value
+        }, 2))
+    }
+    static buildState(){
+        JSON.parse(sessionStorage.getItem("checkoutList"), (key, value) => {
+            if(value && value.name) return new Checkout(value.name, value.amount)
+            return value
+        })
     }
     static formCreate(){
         const checkoutFormElement = document.getElementById("createCheckoutForm")
@@ -38,6 +56,7 @@ class Checkout{
         this.amount = Math.floor(Number(this.updateForm.HTML.querySelector("input[name='amount']").value)*100)/100
         this.updateForm.HTML.querySelector("input[name='amount']").value = TipsManager.getHundredthsRep(this.amount)
         this.updateForm.closeEdit()
+        Checkout.saveState()
         TipsManager.updateTips()
     }
     deleteFunction = () => {
@@ -46,6 +65,7 @@ class Checkout{
         Checkout.checkoutList.splice(ind, 1)
         if(Checkout.checkoutList.length > 0) Checkout.checkoutList[Math.min(ind,Checkout.checkoutList.length-1)].updateForm.select()
             TipsManager.updateTips()
+        Checkout.saveState()
     }
     fillFunction = () => {
         this.updateForm.HTML.querySelector("input[name='name']").value = this.name

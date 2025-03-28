@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HomePageController {
     @RequestMapping("")
     public String displayPage(){
-        return "index.html";
+        return "calculator.html";
     }
 }

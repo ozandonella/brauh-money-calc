@@ -1,6 +1,6 @@
 import {checkFieldsFilled} from "./CreateController.js"
 import UpdateForm from "./UpdateForm.js"
-import {employeeList} from "./Employee.js"
+import Employee, {employeeList} from "./Employee.js"
 import TipsManager from "./TipsManager.js";
 class Job{
     static jobCount = 0
@@ -19,8 +19,27 @@ class Job{
         this.setHTML()
         Job.createEmployeeJobSelect.append(this.optionHTML)
         Job.jobCount++
+        Job.saveState()
     }
-    
+    static saveState(){
+        sessionStorage.setItem("jobList", JSON.stringify(Job.jobList, (key, value) => {
+            if(value instanceof Job){
+                return {
+                    name: value.name,
+                    points: value.points,
+                    isServer: value.isServer
+                };
+            }
+            return value;
+        }, 2))
+    }
+    static buildState(){
+        console.log(sessionStorage.getItem("jobList"))
+        JSON.parse(sessionStorage.getItem("jobList"), (key, value) => {
+            if(value && value.name) return new Job(value.name, value.points, value.isServer)
+            return value
+        })
+    }
     static addListeners(){
         Job.createEmployeeJobSelect.addEventListener("change", Job.jobUpdate)
         document.getElementById("isServer").addEventListener("change", Job.isServerUpdate)
@@ -54,9 +73,6 @@ class Job{
     }
     static findSelectedOptionJob(){
         return Job.jobList.find(job => job.optionHTML.selected)
-    }
-    static findJobByID(id){
-
     }
     static jobUpdate(){
         const employeeCheckoutElements = document.querySelectorAll(".employeeCheckoutInput")
@@ -117,9 +133,6 @@ class Job{
             label.classList.remove("checked")
         }
     }
-    updateEmployeeWorkHours(){
-        
-    }
     fillFunction = () => {
         this.updateForm.HTML.querySelector("input[name='name']").value = this.name
         this.updateForm.HTML.querySelector("input[name='points']").value = this.points
@@ -152,6 +165,8 @@ class Job{
         TipsManager.updateTips()
         this.updateForm.closeEdit()
         Job.jobUpdate()
+        Job.saveState()
+        Employee.saveState()
     }
     deleteFunction = () => {
         if(Job.jobList.length === 1){
@@ -177,6 +192,8 @@ class Job{
         Job.jobList[Math.min(ind, Job.jobList.length-1)].updateForm.select()
         TipsManager.updateTips()
         Job.jobUpdate()
+        Job.saveState()
+        Employee.saveState()
     }
     setHTML(){
         const createJobOptionFromthis = () => {
