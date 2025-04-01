@@ -1,7 +1,7 @@
 import Job from "./Job.js";
 import Employee from "./Employee.js";
 import Checkout from "./Checkout.js";
-import { unselectCurrentForm } from "./UpdateForm.js";
+import { selectedUpdateForm, unselectCurrentForm } from "./UpdateForm.js";
 import {clickHandler, touchenedHandler} from "../util/EventHandler.js";
 
 class CreateController{
@@ -37,6 +37,31 @@ class CreateController{
     }
     static saveState(){
         sessionStorage.setItem("state", "true")
+        const preview = document.getElementById("lists").cloneNode(true)
+        preview.querySelector("#jobListContainer").remove()
+        preview.querySelectorAll("button").forEach(el => el.remove())
+        preview.querySelectorAll(".editAndDelete").forEach(el => el.remove())
+        preview.querySelectorAll("p[class = '.editColumn']").forEach(el => el.remove())
+        preview.querySelector("#employeeListHeader").setAttribute("id", "employeePreviewHeader")
+        preview.querySelector("#checkoutListHeader").setAttribute("id", "checkoutPreviewHeader")
+        preview.querySelectorAll(".employeeUpdateForm, .checkoutUpdateForm").forEach(el => {
+            const updateData = new FormData(document.getElementById(el.getAttribute("id")))
+            if(el.classList.contains("checkoutUpdateForm")){
+                el.classList.remove("checkoutUpdateForm")
+                el.classList.add("checkoutPreviewForm")
+                el.querySelector("input[name = 'name']").setAttribute("value", updateData.get("name"))
+                el.querySelector("input[name = 'amount']").setAttribute("value", updateData.get("amount"))
+            }
+            else{
+                el.classList.remove("employeeUpdateForm")
+                el.classList.add("employeePreviewForm")
+                el.querySelector("input[name = 'name']").setAttribute("value", updateData.get("name"))
+                el.querySelector("input[name = 'hours']").setAttribute("value", updateData.get("hours"))
+                el.querySelector("option[value = '"+ updateData.get("job")+"']").setAttribute("selected", "selected")
+            }
+        })
+        console.log(preview)    
+        sessionStorage.setItem("preview", preview.innerHTML)
     }
     static buildState(){
         Job.buildState()
@@ -44,6 +69,7 @@ class CreateController{
         Employee.buildState()
     }
     static confirmButtonPressed(){
+        unselectCurrentForm()
         CreateController.saveState()
         window.location.href = "confirm.html"
     }

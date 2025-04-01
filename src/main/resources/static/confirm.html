@@ -4,22 +4,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirm Tips</title>
     <link rel="stylesheet" href="assets/style.css">
-    
-    <script type="module" src="js/confirm-form/main.js"></script>
+    <script type="module" src="js/confirm/Confirm.js"></script>
 </head>
 <body>
     <form id="confirmForm">
         <h1>Confirm Tips</h1>
-        <input type="text" name="primary" value="" placeholder="Primary person">
-        <input type="text" name="secondary" value="" placeholder="Secondary person">
-        <input type="date" name="date">
-        <button type="submit" name="submit">Submit</button>
+        <input id="primaryPerson" type="text" name="primary" value="" placeholder="Primary person">
+        <input id="secondaryPerson" type="text" name="secondary" value="" placeholder="Secondary person">
+        <input id="date" type="date" name="date">
+        <button type="button" id="submitButton" name="submit">Submit</button>
     </form>
-    <div id="preview">
+    <section id="preview">
 
-    </div>>
-    <script>
-        document.querySelector("[type = 'date']").valueAsDate = new Date();
-    </script>
+    </section>
 </body>
 </head>

@@ -7,7 +7,7 @@
         <link rel="stylesheet" href="assets/style.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"/>
         
-        <script type="module" src="js/calculator/main.js"></script>
+        <script type="module" src="js/calculator/Calculator.js"></script>
     </head>
     <body>
         <section id="header">
@@ -26,7 +26,7 @@
                 <input type="number" name="hours" value="" placeholder="Hours" min="0" step=".01">
                 <input type="number" class="employeeCheckoutInput" name="checkout" placeholder="Checkout" value="">
             </form>
-        
+             
             <form id="createJobForm" class="form subForm hidden" data-form="job">
                 <input type="text" name="name" placeholder="Name">
                 <input type="number" name="points" placeholder="Points" step=".05" value="" min="0.0" max="4.0">
@@ -40,7 +40,7 @@
         </section>
         <section id="lists">
             <div id="employeeListContainer">
-                <div id="employeeListHeader"><p>EDIT</p><p>NAME</p><p>JOB</p><p>HOURS</p><p>TIPS</p></div>
+                <div id="employeeListHeader"><p class=".editColumn">EDIT</p><p>NAME</p><p>JOB</p><p>HOURS</p><p>TIPS</p></div>
                 <ul id="employeeList">
                     
                 </ul>
@@ -48,9 +48,8 @@
             </div>
             <div id="sideList">
                 <div id="checkoutListContainer">
-                    <div id="checkoutListHeader"><p>EDIT</p><p>NAME</p><p>AMNT</p></div>
+                    <div id="checkoutListHeader"><p class=".editColumn">EDIT</p><p>NAME</p><p>AMNT</p></div>
                     <ul id="checkoutList">
-                        
                     </ul>
                     <p id="totalTips"></p>
                 </div>
@@ -58,6 +57,7 @@
                     <div id="jobListHeader"><p>EDIT</p><p>JOB</p><p>PNTS</p><p>SRVR</p></div>
                     <ul id="jobList">
                     </ul>
+                    <p id="hourlyPerPoint"></p>
                 </div>
                 <button type="button" id="sideListButton">Show Jobs</button>
             </div>

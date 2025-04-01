@@ -99,7 +99,8 @@ label.checkbox{
     background-color: rgb(62, 148, 75);
     color: white;
 }
-#createButton:hover{
+#createButton:hover,
+#submitButton:hover{
     background-color: rgb(37, 83, 43);
 }
 
@@ -146,8 +147,12 @@ label.checkbox{
     background-color: rgb(15, 45, 60);
 }
 #sideListButton:active,
-#confirmButton:active{
+#confirmButton:active,
+#submitButton:active{
     background-color: rgb(0, 0, 0);
+}
+#preview{
+    display: flex;
 }
 #lists{
     padding-top: 90px;
@@ -181,9 +186,10 @@ ul{
     padding: 10px 0px;
     margin: 0;
 }
-.employeeUpdateForm,
-.jobUpdateForm,
-.checkoutUpdateForm,
+#preview form,
+#lists form,
+#checkoutPreviewHeader,
+#employeePreviewHeader,
 #checkoutListHeader,
 #jobListHeader,
 #employeeListHeader{ 
@@ -197,6 +203,12 @@ ul{
 }
 .employeeUpdateForm, #employeeListHeader{
     grid-template-columns: 70px 2fr 2fr 1fr 1fr;
+}
+.employeePreviewForm, #employeePreviewHeader{
+    grid-template-columns: 2fr 2fr 1fr 1fr;
+}
+.checkoutPreviewForm, #checkoutPreviewHeader{
+    grid-template-columns: 1fr 1fr;
 }
 .jobUpdateForm, #jobListHeader{
     grid-template-columns: 70px 2fr 1fr 1fr;
@@ -233,7 +245,8 @@ P{
 #checkoutListContainer p{
     background-color: rgb(31, 95, 127);
 }
-#checkoutListContainer p[id = "totalTips"]{
+#checkoutListContainer p[id = "totalTips"],
+#jobListContainer p[id = "hourlyPerPoint"]{
     background-color: rgb(8,8,8);
 }
 #employeeListContainer p{

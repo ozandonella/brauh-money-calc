@@ -6,9 +6,14 @@ class TipsManager{
     static updateTips(){
         let totalTips = checkoutList.reduce((totalTips, checkout) => {return totalTips + checkout.amount*100}, 0)
         document.getElementById("totalTips").innerText = "Tip Pool: $" + TipsManager.getHundredthsRep(totalTips/100)
-        if(employeeList.length === 0) return
+        sessionStorage.setItem("totalTips", TipsManager.getHundredthsRep(totalTips/100))
+        if(employeeList.length === 0){
+            document.getElementById("hourlyPerPoint").innerText = "Rate(1.00) >= $0.00"
+            return
+        }
         const totalPointHours = Math.ceil(jobList.reduce((pointHours, job) => {return pointHours + ((job.employeeWorkHours * 100) * (job.points * 100))}, 0))
         const pointHourley = ((totalTips*100)/totalPointHours) 
+        document.getElementById("hourlyPerPoint").innerText = "Rate(1.00) >= $" + TipsManager.getHundredthsRep(pointHourley)
         let paidTotal = 0
         const tipMap = Array.from(employeeList)
         .map((employee) => {

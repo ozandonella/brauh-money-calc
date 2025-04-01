@@ -25,9 +25,9 @@ class Job{
         sessionStorage.setItem("jobList", JSON.stringify(Job.jobList, (key, value) => {
             if(value instanceof Job){
                 return {
+                    id: value.id,
                     name: value.name,
                     points: value.points,
-                    isServer: value.isServer
                 };
             }
             return value;
