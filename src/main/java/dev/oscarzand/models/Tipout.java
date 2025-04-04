@@ -1,10 +1,7 @@
-package dev.oscarzand.tipout;
+package dev.oscarzand.models;
 
-import java.util.Date;
 import java.util.List;
-import dev.oscarzand.employee.Employee;
-import dev.oscarzand.job.Job;
-import dev.oscarzand.checkout.Checkout;
+
 public class Tipout {
     private String primaryPerson;
     private String secondaryPerson;

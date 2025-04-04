@@ -1,4 +1,4 @@
-package dev.oscarzand.checkout;
+package dev.oscarzand.models;
 
 public class Checkout {
     private String name;

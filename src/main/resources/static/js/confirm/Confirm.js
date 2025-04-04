@@ -62,5 +62,12 @@ const postData = () => {
         },
         body: body
     })
-    console.log("data posted")
+    .then(res => {
+        console.log(res)
+        return res.json()
+    })
+    .then(data => {
+        window.location.href = data.pdfUrl
+        console.log(data)
+    })
 }

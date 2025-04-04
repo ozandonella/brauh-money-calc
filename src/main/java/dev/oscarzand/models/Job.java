@@ -1,4 +1,4 @@
-package dev.oscarzand.job;
+package dev.oscarzand.models;
 
 public class Job {
     private String name;

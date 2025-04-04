@@ -8,19 +8,22 @@ import com.itextpdf.text.pdf.PdfWriter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
+import dev.oscarzand.models.Tipout;
+
 public class PdfTipsGenerator {
-    private static Document document = new Document(PageSize.A4, 0, 0, 10, 10);
-    public static void convert(TipOut tipOut){
+    private static Document document;
+    public static void convert(Tipout tipout){
         try {
-            PdfWriter.getInstance(document, new FileOutputStream("generatedPdfs/TipsRecord(" + tipOut.getDate() + ").pdf"));
+            document = new Document(PageSize.A4, 0, 0, 10, 10);
+            PdfWriter.getInstance(document, new FileOutputStream("generatedPdfs/TipsRecord(" + tipout.getDate() + ").pdf"));
             document.open();
-            setHeader(tipOut);
+            setHeader(tipout);
             document.close();
         }catch (Exception e){
             e.printStackTrace();
         }
     }
-    private static void setHeader(TipOut tipOut){
+    private static void setHeader(Tipout tipOut){
         try{
             PdfPTable table = new PdfPTable(new float[]{1,3});
             table.setWidthPercentage(100);

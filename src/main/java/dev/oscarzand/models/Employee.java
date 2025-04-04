@@ -1,5 +1,4 @@
-package dev.oscarzand.employee;
-import dev.oscarzand.job.Job;
+package dev.oscarzand.models;
 public class Employee {
     private String name;
     private Job job;
