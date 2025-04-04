@@ -1,78 +1,46 @@
 package dev.oscarzand.employee;
-
+import dev.oscarzand.job.Job;
 public class Employee {
-    private Integer id;
     private String name;
-    private Double hours;
-    private Double startTime;
-    private Double endTime;
-    private Double points;
-    private Integer pay;
-    public Employee() {
-
-    }
-
-    public Employee(String name, Double hours, Double startTime, Double endTime, Double points, Integer id) {
-        this.id=id;
+    private Job job;
+    private double hours;
+    private double tips;
+    public Employee(){}
+    public Employee(String name, Job job, double hours, double tips){
         this.name = name;
+        this.job = job;
         this.hours = hours;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.points=points;
+        this.tips = tips;
     }
-
-    public Integer getId(){return id;}
-
-    public void setId(Integer id){this.id=id;}
-
-    public String getName() {
-        return name;
+    public String getName(){
+        return this.name;
+    }
+    public Job getJob(){
+        return this.job;
+    }
+    public double getHours(){
+        return this.hours;
+    }
+    public double getTips(){
+        return this.tips;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public Double getHours() {
-        return hours;
+    public void setJob(Job job) {
+        this.job = job;
     }
 
-    public void setHours(Double hours) {
+    public void setHours(double hours) {
         this.hours = hours;
     }
 
-    public Double getStartTime() {
-        return startTime;
+    public void setTips(double tips) {
+        this.tips = tips;
     }
-
-    public void setStartTime(Double startTime) {
-        this.startTime = startTime;
-    }
-
-    public Double getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Double endTime) {
-        this.endTime = endTime;
-    }
-    public Double getPoints() {
-        return points;
-    }
-
-    public void setPoints(Double points) {
-        this.points = points;
-    }
-    public Integer getPay() {
-        return pay;
-    }
-
-    public void setPay(Integer pay) {
-        this.pay = pay;
-    }
-
-    @Override
-    public String toString() {
-        return "\nname: "+name+"\nhours: "+hours+"\npoints: "+points;
+    public String toString(){
+        return "employee: "+ this.name + ", Job: {"+ this.job + "}, hours: " + this.hours + ", tips: " + this.tips;
     }
 }

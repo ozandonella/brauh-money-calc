@@ -14,29 +14,53 @@ document.addEventListener("DOMContentLoaded", () => {
     
 })
 
-const postData = () => {
-    fetch("http://localhost:8080/download", {
+
+const testPost = () => {
+    fetch("http://localhost:8080/test", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            primaryPerson: document.getElementById("primaryPerson").value,
-            secondaryPerson: document.getElementById("secondaryPerson").value,
-            date: document.getElementById("date").value,
-            totalTips: sessionStorage.getItem("totalTips"),
-            jobList: JSON.parse(sessionStorage.getItem("jobList")), 
-            employeeList: JSON.parse(sessionStorage.getItem("employeeList")), 
-            checkoutList: JSON.parse(sessionStorage.getItem("checkoutList"))
-        })
-    }).then(response => {
-        return response.blob()
-    }).then(blob => {
-        const link = document.createElement("a")
-        link.href = URL.createObjectURL(blob)
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
+                name: "bar",
+                points: 4
+            })
+    })
+}
+const postData = () => {
+    const body = JSON.stringify({
+        primaryPerson: document.getElementById("primaryPerson").value,
+        secondaryPerson: document.getElementById("secondaryPerson").value,
+        date: document.getElementById("date").value,
+        totalTips: sessionStorage.getItem("totalTips"),
+        jobList: JSON.parse(sessionStorage.getItem("jobList"), (key, val) => {
+            if(val.name) return {
+                name: val.name,
+                points: val.points
+            }
+            return val
+        }), 
+        employeeList: JSON.parse(sessionStorage.getItem("employeeList"), (key, val) => {
+            if(val.tips) return {
+                name: val.name,
+                job: {
+                    name: val.job.name,
+                    points: val.job.points
+                },
+                hours: val.hours,
+                tips: val.tips
+            }
+            return val
+        }), 
+        checkoutList: JSON.parse(sessionStorage.getItem("checkoutList"))
+    }, 2)
+    console.log(body)
+    fetch("http://localhost:8080/download", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: body
     })
     console.log("data posted")
 }

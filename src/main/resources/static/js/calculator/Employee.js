@@ -1,4 +1,5 @@
 import Checkout from "./Checkout.js";
+import Job from "./Job.js";
 import {checkFieldsFilled, displayConfirmButton} from "./CreateController.js"
 import {findSelectedOptionJob, jobList} from "./Job.js"
 import UpdateForm from "./UpdateForm.js";
@@ -29,17 +30,26 @@ class Employee{
             if(value instanceof Employee){
                 return {
                     name: value.name,
-                    job: value.job.id,
+                    jobId: value.job.id,
+                    job: {
+                        name: value.job.name,
+                        points: value.job.points,
+                        isServer: value.job.isServer
+                    },
                     hours: value.hours,
                     tips: value.tips
                 }
             }
             return value
         }, 2))
+        console.log(sessionStorage.getItem("employeeList"))
     }
     static buildState(){
         JSON.parse(sessionStorage.getItem("employeeList"), (key, value) => {
-            if(value && value.name) return new Employee(value.name, jobList.find((job) => job.id == value.job), value.hours)
+            if(value && value.tips){
+                console.log(value.hours)
+                return new Employee(value.name, jobList.find(job => job.id === value.jobId), value.hours)
+            }
             return value
         })
     }

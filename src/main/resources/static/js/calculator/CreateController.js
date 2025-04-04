@@ -39,6 +39,7 @@ class CreateController{
         sessionStorage.setItem("state", "true")
         const preview = document.getElementById("lists").cloneNode(true)
         preview.querySelector("#jobListContainer").remove()
+        preview.querySelector("#checkoutListContainer").classList.remove("hidden")
         preview.querySelectorAll("button").forEach(el => el.remove())
         preview.querySelectorAll(".editAndDelete").forEach(el => el.remove())
         preview.querySelectorAll("p[class = '.editColumn']").forEach(el => el.remove())

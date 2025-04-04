@@ -11,6 +11,7 @@ class TipsManager{
             document.getElementById("hourlyPerPoint").innerText = "Rate(1.00) >= $0.00"
             return
         }
+        console.log(employeeList[0])
         const totalPointHours = Math.ceil(jobList.reduce((pointHours, job) => {return pointHours + ((job.employeeWorkHours * 100) * (job.points * 100))}, 0))
         const pointHourley = ((totalTips*100)/totalPointHours) 
         document.getElementById("hourlyPerPoint").innerText = "Rate(1.00) >= $" + TipsManager.getHundredthsRep(pointHourley)
