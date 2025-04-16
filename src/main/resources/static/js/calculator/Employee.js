@@ -1,5 +1,4 @@
 import Checkout from "./Checkout.js";
-import Job from "./Job.js";
 import {checkFieldsFilled, displayConfirmButton} from "./CreateController.js"
 import {findSelectedOptionJob, jobList} from "./Job.js"
 import UpdateForm from "./UpdateForm.js";
@@ -9,7 +8,6 @@ class Employee{
     static createEmployeeForm = document.getElementById("createEmployeeForm")
     static employeeList = []
     constructor(name, job, hours){
-        hours = Math.floor(hours*100)/100
         this.name = name
         this.job = job
         this.hours = hours
@@ -17,13 +15,12 @@ class Employee{
         Employee.employeeList.push(this)
         Employee.employeeCount++
         this.updateForm = null
-        this.jobSelectHTML = null
         this.tips = 0
         this.job.employeeWorkHours += hours
         displayConfirmButton()
         this.setHTML()
         TipsManager.updateTips()
-        Employee.saveState()
+
     }
     static saveState(){
         sessionStorage.setItem("employeeList", JSON.stringify(Employee.employeeList, (key, value) => {
@@ -42,12 +39,10 @@ class Employee{
             }
             return value
         }, 2))
-        console.log(sessionStorage.getItem("employeeList"))
     }
     static buildState(){
         JSON.parse(sessionStorage.getItem("employeeList"), (key, value) => {
             if(value && value.tips){
-                console.log(value.hours)
                 return new Employee(value.name, jobList.find(job => job.id === value.jobId), value.hours)
             }
             return value
@@ -63,22 +58,20 @@ class Employee{
         Employee.createEmployeeForm.querySelector("select").selectedIndex = selectInd
     }
     
-    static validateEmployee(employeeformElement){
+    static validateEmployee(employeeFormElement){
 
-        if(!checkFieldsFilled(employeeformElement, ["name"])){
+        if(!checkFieldsFilled(employeeFormElement, ["name"])){
             console.log("employee must have name")
             return false
         }
         const job = findSelectedOptionJob()
-        if(job.isServer&&!checkFieldsFilled(employeeformElement, ["checkout"])){
+        if(job.isServer&&!checkFieldsFilled(employeeFormElement, ["checkout"])){
             console.log("server employee must have a checkout")
             return false
         }
         return true
     }
-    static getCreateForm(){
-        return Employee.createEmployeeForm
-    }
+
     setTips(tips){
         this.tips = tips
         this.updateForm.HTML.querySelector(".tipOut").innerText = "$"+tips
@@ -100,13 +93,15 @@ class Employee{
         this.job.employeeWorkHours -= this.hours
         this.hours = Math.floor(100*Number(this.updateForm.HTML.querySelector("input[name='hours']").value))/100
         this.updateForm.HTML.querySelector("input[name='hours']").value=TipsManager.getHundredthsRep(this.hours)
-        const newJobId = this.updateForm.HTML.querySelector("select").selectedOptions[0].dataset.jobOption
-        this.job = jobList.find((job) => job.id == newJobId)
+        const newJobId = Number(this.updateForm.HTML.querySelector("select").selectedOptions[0].dataset.jobOption)
+        this.job = jobList.find((job) => job.id === newJobId)
+        console.log(newJobId)
+        console.log(jobList)
+        console.log(this.job)
         this.job.employeeWorkHours += this.hours
         TipsManager.updateTips()
         this.updateForm.closeEdit()
-        Employee.saveState()
-        //UPDATE TIPS
+
     }
     deleteFunction = () => {
         this.updateForm.HTML.remove()
@@ -116,8 +111,6 @@ class Employee{
         if(Employee.employeeList.length > 0) Employee.employeeList[Math.min(ind, Employee.employeeList.length-1)].updateForm.select()
         displayConfirmButton()
         TipsManager.updateTips()
-        Employee.saveState()
-        //UPDATE TIPS
     }
     setHTML(){
         const updateFormHTML = Employee.createEmployeeForm.cloneNode(true)
@@ -134,5 +127,6 @@ class Employee{
     }
 
 }
+export const saveState = () => Employee.saveState()
 export const employeeList = Employee.employeeList
 export default Employee

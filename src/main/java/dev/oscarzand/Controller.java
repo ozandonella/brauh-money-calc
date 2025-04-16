@@ -44,7 +44,6 @@ public class Controller {
             e.printStackTrace();
         }
         return new ResponseEntity<Resource>(HttpStatus.NO_CONTENT);
-        //return new ResponseEntity<Map<String, String>>()
     }
 
 }

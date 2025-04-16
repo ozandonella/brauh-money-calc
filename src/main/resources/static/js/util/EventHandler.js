@@ -27,5 +27,4 @@ class EventHandler{
     }
 }
 export const clickHandler = new EventHandler("click")
-export const touchenedHandler = new EventHandler("touchend")
 export default EventHandler

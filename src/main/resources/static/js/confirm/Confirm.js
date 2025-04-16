@@ -1,38 +1,36 @@
 import EventHandler from "../util/EventHandler.js";
 const clickHandler = new EventHandler("click")
-const touchenedHandler = new EventHandler("touchend")
-
+//const touchenedHandler = new EventHandler("touchend")
+const CLOUDFLAIR = "https://tips.brauhcalc.com"
+const LOCALHOST = "http://localhost:8080"
 document.addEventListener("DOMContentLoaded", () => {
+    /*console.log(
+        JSON.stringify({
+            employeeList: JSON.parse(sessionStorage.getItem("employeeList")),
+            checkoutList: JSON.parse(sessionStorage.getItem("checkoutList")),
+            jobList: JSON.parse(sessionStorage.getItem("jobList"))
+        }, null, 2)
+    )*/
+    window.onpopstate = () => {
+        window.alert("farter")
+        history.replaceState(null, "", "https://tips.brauhcalc.com")
+    }
     document.querySelector("[type = 'date']").valueAsDate = new Date();
     document.getElementById("preview").innerHTML = sessionStorage.getItem("preview");
     const submitButton = document.getElementById("submitButton")
 
     clickHandler.addElement("submitButtonClicked", postData, submitButton)
-    touchenedHandler.addElement("submitButtonTouchend", postData, submitButton)
     clickHandler.appendTo(document.body)
-    touchenedHandler.appendTo(document.body)
-    
 })
 
 
-const testPost = () => {
-    fetch("http://localhost:8080/test", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-                name: "bar",
-                points: 4
-            })
-    })
-}
 const postData = () => {
     const body = JSON.stringify({
         primaryPerson: document.getElementById("primaryPerson").value,
         secondaryPerson: document.getElementById("secondaryPerson").value,
         date: document.getElementById("date").value,
         totalTips: sessionStorage.getItem("totalTips"),
+        singlePointHourly: sessionStorage.getItem("singlePointHourly"),
         jobList: JSON.parse(sessionStorage.getItem("jobList"), (key, val) => {
             if(val.name) return {
                 name: val.name,
@@ -54,8 +52,7 @@ const postData = () => {
         }), 
         checkoutList: JSON.parse(sessionStorage.getItem("checkoutList"))
     }, 2)
-    console.log(body)
-    fetch("http://localhost:8080/download", {
+    fetch(CLOUDFLAIR+"/download", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

@@ -7,15 +7,17 @@ public class Tipout {
     private String secondaryPerson;
     private String date;
     private double totalTips;
+    private double singlePointHourly;
     private List<Job> jobList;
     private List<Employee> employeeList;
     private List<Checkout> checkoutList;
     public Tipout(){}
-    public Tipout(String primaryPerson, String secondaryPerson, String date, double totalTips, List<Job> jobList, List<Employee> employeeList, List<Checkout> checkoutList){
+    public Tipout(String primaryPerson, String secondaryPerson, String date, double totalTips, double singlePointHourly, List<Job> jobList, List<Employee> employeeList, List<Checkout> checkoutList){
         this.primaryPerson = primaryPerson;
         this.secondaryPerson = secondaryPerson;
         this.date = date;
         this.totalTips = totalTips;
+        this.singlePointHourly = singlePointHourly;
         this.jobList = jobList;
         this.employeeList = employeeList;
         this.checkoutList = checkoutList;
@@ -31,6 +33,9 @@ public class Tipout {
     }
     public double getTotalTips(){
         return this.totalTips;
+    }
+    public double getSinglePointHourly(){
+        return this.singlePointHourly;
     }
     public List<Job> getJobList(){
         return this.jobList;
@@ -56,7 +61,9 @@ public class Tipout {
     public void setTotalTips(double totalTips) {
         this.totalTips = totalTips;
     }
-
+    public void setSinglePointHourly(double singlePointHourly){
+        this.singlePointHourly = singlePointHourly;
+    }
     public void setJobList(List<Job> jobList) {
         this.jobList = jobList;
     }

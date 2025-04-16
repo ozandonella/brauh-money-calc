@@ -1,5 +1,5 @@
 import { getIconElement } from "./CreateController.js"
-import { clickHandler, touchenedHandler} from "../util/EventHandler.js"
+import { clickHandler } from "../util/EventHandler.js"
 class UpdateForm{
     static selectedUpdateForm
     constructor(updateFunction, deleteFunction, fillFunction, className, id,  formElement){
@@ -32,10 +32,10 @@ class UpdateForm{
         clickHandler.addElement("edit"+this.className+this.id, this.openEdit, editButton)
         clickHandler.addElement("select"+this.className+this.id, this.select, this.HTML)
         
-        touchenedHandler.addElement("check"+this.className+this.id, this.updateFunction, this.updateButtonHTML)
-        touchenedHandler.addElement("delete"+this.className+this.id, this.deleteFunction, deleteButton)
-        touchenedHandler.addElement("edit"+this.className+this.id, this.openEdit, editButton)
-        touchenedHandler.addElement("select"+this.className+this.id, this.select, this.HTML)
+        //touchenedHandler.addElement("check"+this.className+this.id, this.updateFunction, this.updateButtonHTML)
+        //touchenedHandler.addElement("delete"+this.className+this.id, this.deleteFunction, deleteButton)
+        //touchenedHandler.addElement("edit"+this.className+this.id, this.openEdit, editButton)
+        //touchenedHandler.addElement("select"+this.className+this.id, this.select, this.HTML)
 
         UpdateForm.setChildrenDisabled(this.HTML, true)
     }

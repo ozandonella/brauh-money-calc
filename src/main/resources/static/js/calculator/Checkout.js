@@ -1,13 +1,16 @@
-import { checkFieldsFilled } from "./CreateController.js"
+import {checkFieldsFilled} from "./CreateController.js"
 import TipsManager from "./TipsManager.js"
 import UpdateForm from "./UpdateForm.js"
 class Checkout{
     static checkoutCount = 0
     static createCheckoutForm = document.getElementById("createCheckoutForm")
-    static totalTipsElement = document.getElementById("totalTips")
     static checkoutList = []
     constructor(name, amount){
-        amount = Math.floor(amount*100)/100
+        //console.log(TipsManager.moveDecimal(1234.5678,0))
+        //console.log(TipsManager.moveDecimal(1234.5678,3))
+        //console.log(TipsManager.moveDecimal(1234.5678,-1))
+        //console.log(TipsManager.moveDecimal(1234.5678,8))
+        //console.log(TipsManager.moveDecimal(1234.5678,-8))
         this.name = name
         this.amount = amount
         this.id = Checkout.checkoutCount
@@ -16,7 +19,6 @@ class Checkout{
         Checkout.checkoutList.push(this)
         Checkout.checkoutCount++
         TipsManager.updateTips()
-        Checkout.saveState()
     }
     static saveState(){
         sessionStorage.setItem("checkoutList", JSON.stringify(Checkout.checkoutList, (key, value) => {
@@ -56,7 +58,6 @@ class Checkout{
         this.amount = Math.floor(Number(this.updateForm.HTML.querySelector("input[name='amount']").value)*100)/100
         this.updateForm.HTML.querySelector("input[name='amount']").value = TipsManager.getHundredthsRep(this.amount)
         this.updateForm.closeEdit()
-        Checkout.saveState()
         TipsManager.updateTips()
     }
     deleteFunction = () => {
@@ -64,8 +65,7 @@ class Checkout{
         let ind = Checkout.checkoutList.indexOf(this)
         Checkout.checkoutList.splice(ind, 1)
         if(Checkout.checkoutList.length > 0) Checkout.checkoutList[Math.min(ind,Checkout.checkoutList.length-1)].updateForm.select()
-            TipsManager.updateTips()
-        Checkout.saveState()
+        TipsManager.updateTips()
     }
     fillFunction = () => {
         this.updateForm.HTML.querySelector("input[name='name']").value = this.name

@@ -1,0 +1,310 @@
+{
+  "employeeList": [
+    {
+      "name": "Oscar",
+      "jobId": 0,
+      "job": {
+        "name": "Server",
+        "points": 4,
+        "isServer": true
+      },
+      "hours": 5.59,
+      "tips": 106
+    },
+    {
+      "name": "miles",
+      "jobId": 5,
+      "job": {
+        "name": "Busser",
+        "points": 1.5,
+        "isServer": false
+      },
+      "hours": 5.24,
+      "tips": 37
+    },
+    {
+      "name": "val",
+      "jobId": 5,
+      "job": {
+        "name": "Busser",
+        "points": 1.5,
+        "isServer": false
+      },
+      "hours": 4.92,
+      "tips": 35
+    },
+    {
+      "name": "bea",
+      "jobId": 5,
+      "job": {
+        "name": "Busser",
+        "points": 1.5,
+        "isServer": false
+      },
+      "hours": 5.3,
+      "tips": 38
+    },
+    {
+      "name": "wynne",
+      "jobId": 3,
+      "job": {
+        "name": "CH",
+        "points": 1.75,
+        "isServer": false
+      },
+      "hours": 4.17,
+      "tips": 34
+    },
+    {
+      "name": "moses",
+      "jobId": 4,
+      "job": {
+        "name": "BBK",
+        "points": 1.75,
+        "isServer": false
+      },
+      "hours": 5.96,
+      "tips": 49
+    },
+    {
+      "name": "hana",
+      "jobId": 2,
+      "job": {
+        "name": "Host",
+        "points": 4,
+        "isServer": false
+      },
+      "hours": 4.28,
+      "tips": 81
+    },
+    {
+      "name": "sarah p",
+      "jobId": 2,
+      "job": {
+        "name": "Host",
+        "points": 4,
+        "isServer": false
+      },
+      "hours": 5.76,
+      "tips": 109
+    },
+    {
+      "name": "nicole c",
+      "jobId": 1,
+      "job": {
+        "name": "Bar",
+        "points": 4,
+        "isServer": false
+      },
+      "hours": 5.84,
+      "tips": 110
+    },
+    {
+      "name": "ava",
+      "jobId": 1,
+      "job": {
+        "name": "Bar",
+        "points": 4,
+        "isServer": false
+      },
+      "hours": 6.39,
+      "tips": 121
+    },
+    {
+      "name": "phil",
+      "jobId": 1,
+      "job": {
+        "name": "Bar",
+        "points": 4,
+        "isServer": false
+      },
+      "hours": 6.92,
+      "tips": 131
+    },
+    {
+      "name": "delph",
+      "jobId": 0,
+      "job": {
+        "name": "Server",
+        "points": 4,
+        "isServer": true
+      },
+      "hours": 3.41,
+      "tips": 64
+    },
+    {
+      "name": "shannon",
+      "jobId": 0,
+      "job": {
+        "name": "Server",
+        "points": 4,
+        "isServer": true
+      },
+      "hours": 9.68,
+      "tips": 183
+    },
+    {
+      "name": "sofie",
+      "jobId": 0,
+      "job": {
+        "name": "Server",
+        "points": 4,
+        "isServer": true
+      },
+      "hours": 4.12,
+      "tips": 78
+    },
+    {
+      "name": "ramy",
+      "jobId": 0,
+      "job": {
+        "name": "Server",
+        "points": 4,
+        "isServer": true
+      },
+      "hours": 5.84,
+      "tips": 110
+    },
+    {
+      "name": "fran",
+      "jobId": 0,
+      "job": {
+        "name": "Server",
+        "points": 4,
+        "isServer": true
+      },
+      "hours": 5.69,
+      "tips": 107
+    },
+    {
+      "name": "eric",
+      "jobId": 0,
+      "job": {
+        "name": "Server",
+        "points": 4,
+        "isServer": true
+      },
+      "hours": 6.82,
+      "tips": 129
+    },
+    {
+      "name": "emily",
+      "jobId": 0,
+      "job": {
+        "name": "Server",
+        "points": 4,
+        "isServer": true
+      },
+      "hours": 6.75,
+      "tips": 128
+    },
+    {
+      "name": "margie",
+      "jobId": 0,
+      "job": {
+        "name": "Server",
+        "points": 4,
+        "isServer": true
+      },
+      "hours": 6,
+      "tips": 113
+    },
+    {
+      "name": "noah",
+      "jobId": 0,
+      "job": {
+        "name": "Server",
+        "points": 4,
+        "isServer": true
+      },
+      "hours": 5.23,
+      "tips": 99
+    }
+  ],
+  "checkoutList": [
+    {
+      "name": "Bar Cash",
+      "amount": 62
+    },
+    {
+      "name": "Server Cash",
+      "amount": 360
+    },
+    {
+      "name": "oscar",
+      "amount": 58.62
+    },
+    {
+      "name": "delph",
+      "amount": 12.96
+    },
+    {
+      "name": "shannon",
+      "amount": 223.45
+    },
+    {
+      "name": "sofie",
+      "amount": 36.32
+    },
+    {
+      "name": "ramy",
+      "amount": 150.61
+    },
+    {
+      "name": "fran",
+      "amount": 130.25
+    },
+    {
+      "name": "eric",
+      "amount": 210.54
+    },
+    {
+      "name": "emily",
+      "amount": 98.24
+    },
+    {
+      "name": "margie",
+      "amount": 130.91
+    },
+    {
+      "name": "noah",
+      "amount": 141.62
+    },
+    {
+      "name": "bar",
+      "amount": 246.71
+    }
+  ],
+  "jobList": [
+    {
+      "name": "Server",
+      "points": 4,
+      "isServer": true
+    },
+    {
+      "name": "Bar",
+      "points": 4,
+      "isServer": false
+    },
+    {
+      "name": "Host",
+      "points": 4,
+      "isServer": false
+    },
+    {
+      "name": "CH",
+      "points": 1.75,
+      "isServer": false
+    },
+    {
+      "name": "BBK",
+      "points": 1.75,
+      "isServer": false
+    },
+    {
+      "name": "Busser",
+      "points": 1.5,
+      "isServer": false
+    }
+  ]
+}

@@ -1,26 +1,20 @@
 import Job from "./Job.js";
 import Employee from "./Employee.js";
 import Checkout from "./Checkout.js";
-import { selectedUpdateForm, unselectCurrentForm } from "./UpdateForm.js";
-import {clickHandler, touchenedHandler} from "../util/EventHandler.js";
+import {unselectCurrentForm } from "./UpdateForm.js";
+import {clickHandler} from "../util/EventHandler.js";
 
 class CreateController{
-    static sideListButton = document.getElementById("sideListButton")
     static confirmButton = document.getElementById("confirmButton")
 
     constructor(){
         CreateController.startScripts()
-        
     }
     static startScripts(){
         clickHandler.appendTo(document.body)
-        touchenedHandler.appendTo(document.body)
         clickHandler.addElement("clickCreateButton", CreateController.createFunction, document.getElementById("createButton"))
         clickHandler.addElement("clickChangeSideList", CreateController.displaySideList, document.getElementById("sideListButton"))
         clickHandler.addElement("clickConfirmButton", CreateController.confirmButtonPressed, document.getElementById("confirmButton"))
-        touchenedHandler.addElement("touchCreateButton", CreateController.createFunction, document.getElementById("createButton"))
-        touchenedHandler.addElement("touchChangeSideList", CreateController.displaySideList, document.getElementById("sideListButton"))
-        touchenedHandler.addElement("touchConfirmButton", CreateController.confirmButtonPressed, document.getElementById("confirmButton"))
         document.addEventListener("keydown", event => {
             if(event.target.classList.contains("disabled")) event.preventDefault()
         })
@@ -35,8 +29,15 @@ class CreateController{
             Checkout.addBaseCheckouts()
         }
     }
+    static saveObjects(){
+        console.log("saving objects")
+        Employee.saveState()
+        Job.saveState()
+        Checkout.saveState()
+    }
     static saveState(){
         sessionStorage.setItem("state", "true")
+        saveObjects()
         const preview = document.getElementById("lists").cloneNode(true)
         preview.querySelector("#jobListContainer").remove()
         preview.querySelector("#checkoutListContainer").classList.remove("hidden")
@@ -61,7 +62,6 @@ class CreateController{
                 el.querySelector("option[value = '"+ updateData.get("job")+"']").setAttribute("selected", "selected")
             }
         })
-        console.log(preview)    
         sessionStorage.setItem("preview", preview.innerHTML)
     }
     static buildState(){
@@ -72,7 +72,7 @@ class CreateController{
     static confirmButtonPressed(){
         unselectCurrentForm()
         CreateController.saveState()
-        window.location.href = "confirm.html"
+        window.location.assign("confirm.html")
     }
     static displaySideList(){
         const button = document.getElementById("sideListButton")
@@ -132,6 +132,6 @@ export const getIconElement = (className, iconName) => {
     icon.innerText = iconName
     return icon
 }
-export const preventInteraction = CreateController.preventInteraction 
+export const saveObjects = CreateController.saveObjects
 export const checkFieldsFilled = CreateController.checkFieldsFilled
 export default CreateController
