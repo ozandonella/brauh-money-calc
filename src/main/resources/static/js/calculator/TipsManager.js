@@ -6,11 +6,11 @@ class TipsManager{
     static updateTips(){
         let totalTips = checkoutList.reduce((totalTips, checkout) => {
             //console.log("old: "+totalTips + checkout.amount*100)
-            //console.log("new: "+totalTips + TipsManager.moveDecimal(checkout.amount,2))
-            return totalTips + TipsManager.moveDecimal(checkout.amount,2)
+            //console.log("new: "+checkout.amount)
+            return totalTips + checkout.amount
         }, 0)
-        document.getElementById("totalTips").innerText = "Tip Pool: $" + TipsManager.getHundredthsRep(totalTips/100)
-        sessionStorage.setItem("totalTips", TipsManager.moveDecimal(Math.floor(totalTips),-2))
+        document.getElementById("totalTips").innerText = "Tip Pool: $" + TipsManager.moveDecimal(totalTips,-2)
+        sessionStorage.setItem("totalTips", TipsManager.moveDecimal(totalTips,-2))
         //console.log("curr: "+TipsManager.moveDecimal(Math.floor(totalTips),-2))
         //console.log("old: "+totalTips/100)
         //console.log("new: "+TipsManager.moveDecimal(totalTips,-2))
@@ -22,22 +22,22 @@ class TipsManager{
         const totalPointHours = Math.ceil(jobList.reduce((pointHours, job) => {
             //console.log("old: "+pointHours + ((job.employeeWorkHours * 100) * (job.points * 100)))
             //console.log("new: "+pointHours + TipsManager.moveDecimal(job.employeeWorkHours,2) * TipsManager.moveDecimal(job.points,2))
-            return pointHours + TipsManager.moveDecimal(job.employeeWorkHours,2) * TipsManager.moveDecimal(job.points,2)
+            return pointHours + job.employeeWorkHours * job.points
             }, 0))
         const pointHourly = TipsManager.moveDecimal(totalTips,2)/totalPointHours
         //console.log("old: " +((totalTips*100)/totalPointHours))
         //console.log("new: " + TipsManager.moveDecimal(totalTips,2)/totalPointHours)
         document.getElementById("hourlyPerPoint").innerText = "Rate(1.00) >= $" + TipsManager.getHundredthsRep(pointHourly)
         sessionStorage.setItem("singlePointHourly", TipsManager.getHundredthsRep(pointHourly))
+        const precisePointHourly =  TipsManager.moveDecimal(pointHourly,6)
         let paidTotal = 0
         const tipMap = Array.from(employeeList)
         .map((employee) => {
-            const trueTip = Math.floor(TipsManager.moveDecimal(.0000001 + pointHourly*TipsManager.moveDecimal(employee.job.points,2) * TipsManager.moveDecimal(employee.hours,2),6))
+            const trueTip = Math.floor(.0000001 + precisePointHourly * employee.job.points * employee.hours)
             const curr = Math.floor(TipsManager.moveDecimal(trueTip,-10))
             paidTotal += curr
-            //console.log("old: "+ Math.floor(trueTip/10000000000))
-            //console.log("new: "+ Math.floor(TipsManager.moveDecimal(trueTip,-10)))
-
+            console.log("old: "+ Math.floor(TipsManager.moveDecimal(.0000001 +  pointHourly * employee.job.points * employee.hours,6)))
+            console.log("new: "+ Math.floor(.0000001 + precisePointHourly * employee.job.points * employee.hours))
             return {
                 emp: employee, 
                 tip: curr,
@@ -56,6 +56,9 @@ class TipsManager{
         }
         tipMap
         .forEach(key => key.emp.setTips(key.tip))
+    }
+    static standardizeValue(value){
+        return Math.floor(TipsManager.moveDecimal(value,2))
     }
     static getHundredthsRep(amount){
         let ret = Math.floor(amount)

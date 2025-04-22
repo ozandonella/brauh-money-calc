@@ -8,20 +8,25 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 @RestController
 @RequestMapping("")
 public class Controller {
 
-    @PostMapping("/test")
-    public void test(@RequestBody Job res){
-        System.out.println(res);
+    @GetMapping("/test/{fileName}")
+    public ResponseEntity<String> test(@PathVariable String fileName){
+        try{
+            return ResponseEntity.ok(StreamUtils.copyToString(new FileInputStream(new File("../brauh-money-calc/src/main/resources/static/js/test/"+fileName)), StandardCharsets.UTF_8));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
     @PostMapping("/download")
     public ResponseEntity<Map<String, String>> storePdf(@RequestBody Tipout tipout) throws IOException {

@@ -6,11 +6,6 @@ class Checkout{
     static createCheckoutForm = document.getElementById("createCheckoutForm")
     static checkoutList = []
     constructor(name, amount){
-        //console.log(TipsManager.moveDecimal(1234.5678,0))
-        //console.log(TipsManager.moveDecimal(1234.5678,3))
-        //console.log(TipsManager.moveDecimal(1234.5678,-1))
-        //console.log(TipsManager.moveDecimal(1234.5678,8))
-        //console.log(TipsManager.moveDecimal(1234.5678,-8))
         this.name = name
         this.amount = amount
         this.id = Checkout.checkoutCount
@@ -25,7 +20,7 @@ class Checkout{
             if(value instanceof Checkout){
                 return {
                     name: value.name,
-                    amount: value.amount
+                    amount: TipsManager.moveDecimal(value.amount, -2)
                 }
             }
             return value
@@ -33,7 +28,7 @@ class Checkout{
     }
     static buildState(){
         JSON.parse(sessionStorage.getItem("checkoutList"), (key, value) => {
-            if(value && value.name) return new Checkout(value.name, value.amount)
+            if(value && value.name) return new Checkout(value.name, TipsManager.standardizeValue(value.amount))
             return value
         })
     }
@@ -41,7 +36,7 @@ class Checkout{
         const checkoutFormElement = document.getElementById("createCheckoutForm")
         if(!checkFieldsFilled(checkoutFormElement, ["name","amount"])) return
         const formData = new FormData(Checkout.createCheckoutForm)
-        new Checkout(formData.get("name"), Number(formData.get("amount")))
+        new Checkout(formData.get("name"), TipsManager.standardizeValue(Number(formData.get("amount"))))
         Checkout.createCheckoutForm.reset()
         console.log("checkout created")
     }
@@ -55,8 +50,8 @@ class Checkout{
     updateFunction = () => {
         if(!checkFieldsFilled(this.updateForm.HTML, ["name","amount"])) return
         this.name = this.updateForm.HTML.querySelector("input[name='name']").value
-        this.amount = Math.floor(Number(this.updateForm.HTML.querySelector("input[name='amount']").value)*100)/100
-        this.updateForm.HTML.querySelector("input[name='amount']").value = TipsManager.getHundredthsRep(this.amount)
+        this.amount = TipsManager.standardizeValue(Number(this.updateForm.HTML.querySelector("input[name='amount']").value))
+        this.updateForm.HTML.querySelector("input[name='amount']").value = TipsManager.getHundredthsRep(TipsManager.moveDecimal(this.amount, -2))
         this.updateForm.closeEdit()
         TipsManager.updateTips()
     }
@@ -69,12 +64,12 @@ class Checkout{
     }
     fillFunction = () => {
         this.updateForm.HTML.querySelector("input[name='name']").value = this.name
-        this.updateForm.HTML.querySelector("input[name='amount']").value = TipsManager.getHundredthsRep(this.amount)
+        this.updateForm.HTML.querySelector("input[name='amount']").value = TipsManager.getHundredthsRep(TipsManager.moveDecimal(this.amount, -2))
     }
     setFormWithThis(checkoutFormElement){
         checkoutFormElement.id = "Checkout"+this.id
         checkoutFormElement.querySelector("input[name='name']").value = this.name
-        checkoutFormElement.querySelector("input[name='amount']").value = TipsManager.getHundredthsRep(this.amount)
+        checkoutFormElement.querySelector("input[name='amount']").value = TipsManager.getHundredthsRep(TipsManager.moveDecimal(this.amount, -2))
     }
     setHTML(){
         const formHTML = Checkout.createCheckoutForm.cloneNode(true)

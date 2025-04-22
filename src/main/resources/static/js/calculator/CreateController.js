@@ -2,7 +2,7 @@ import Job from "./Job.js";
 import Employee from "./Employee.js";
 import Checkout from "./Checkout.js";
 import {unselectCurrentForm } from "./UpdateForm.js";
-import {clickHandler} from "../util/EventHandler.js";
+import {clickHandler, changeHandler} from "../util/EventHandler.js";
 
 class CreateController{
     static confirmButton = document.getElementById("confirmButton")
@@ -12,6 +12,7 @@ class CreateController{
     }
     static startScripts(){
         clickHandler.appendTo(document.body)
+        changeHandler.appendTo(document.body)
         clickHandler.addElement("clickCreateButton", CreateController.createFunction, document.getElementById("createButton"))
         clickHandler.addElement("clickChangeSideList", CreateController.displaySideList, document.getElementById("sideListButton"))
         clickHandler.addElement("clickConfirmButton", CreateController.confirmButtonPressed, document.getElementById("confirmButton"))

@@ -27,4 +27,5 @@ class EventHandler{
     }
 }
 export const clickHandler = new EventHandler("click")
+export const changeHandler = new EventHandler("change")
 export default EventHandler

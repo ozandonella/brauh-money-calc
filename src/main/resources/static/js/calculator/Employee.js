@@ -30,10 +30,10 @@ class Employee{
                     jobId: value.job.id,
                     job: {
                         name: value.job.name,
-                        points: value.job.points,
+                        points: TipsManager.moveDecimal(value.job.points,-2),
                         isServer: value.job.isServer
                     },
-                    hours: value.hours,
+                    hours: TipsManager.moveDecimal(value.hours,-2),
                     tips: value.tips
                 }
             }
@@ -42,8 +42,8 @@ class Employee{
     }
     static buildState(){
         JSON.parse(sessionStorage.getItem("employeeList"), (key, value) => {
-            if(value && value.tips){
-                return new Employee(value.name, jobList.find(job => job.id === value.jobId), value.hours)
+            if(value && value.hours){
+                return new Employee(value.name, jobList.find(job => job.id === value.jobId), TipsManager.standardizeValue(value.hours))
             }
             return value
         })
@@ -51,8 +51,8 @@ class Employee{
     static formCreate(){
         if(!Employee.validateEmployee(Employee.createEmployeeForm)) return
         const formData = new FormData(Employee.createEmployeeForm)
-        const employee = new Employee(formData.get("name"), findSelectedOptionJob(), Number(formData.get("hours")))
-        if(employee.job.isServer) new Checkout(employee.name, Number(formData.get("checkout")))
+        const employee = new Employee(formData.get("name"), findSelectedOptionJob(), TipsManager.standardizeValue(formData.get("hours")))
+        if(employee.job.isServer) new Checkout(employee.name, TipsManager.standardizeValue(Number(formData.get("checkout"))))
         const selectInd = Employee.createEmployeeForm.querySelector("select").selectedIndex
         Employee.createEmployeeForm.reset()
         Employee.createEmployeeForm.querySelector("select").selectedIndex = selectInd
@@ -72,32 +72,29 @@ class Employee{
         return true
     }
 
-    setTips(tips){
+    setTips(tips) {
         this.tips = tips
-        this.updateForm.HTML.querySelector(".tipOut").innerText = "$"+tips
+        this.updateForm.HTML.querySelector(".tipOut").innerText = "$" + this.tips
     }
     setFormWithThis(employeeFormElement){
         employeeFormElement.id = "Employee" + this.id
         const selectElement = employeeFormElement.querySelector("select")
         selectElement.querySelector("[data-job-option = '"+this.job.id+"']").selected = true
         employeeFormElement.querySelector("input[name='name']").value=this.name
-        employeeFormElement.querySelector("input[name='hours']").value=TipsManager.getHundredthsRep(this.hours)
+        employeeFormElement.querySelector("input[name='hours']").value=TipsManager.getHundredthsRep(TipsManager.moveDecimal(this.hours,-2))
     }
     fillFunction = () => {
         this.updateForm.HTML.querySelector("input[name='name']").value=this.name
-        this.updateForm.HTML.querySelector("input[name='hours']").value=TipsManager.getHundredthsRep(this.hours)
+        this.updateForm.HTML.querySelector("input[name='hours']").value=TipsManager.getHundredthsRep(TipsManager.moveDecimal(this.hours,-2))
         this.updateForm.HTML.querySelector("option[data-job-option = '"+this.job.id+"']").selected = true
     }
     updateFunction = () => {
         this.name = this.updateForm.HTML.querySelector("input[name='name']").value
         this.job.employeeWorkHours -= this.hours
-        this.hours = Math.floor(100*Number(this.updateForm.HTML.querySelector("input[name='hours']").value))/100
-        this.updateForm.HTML.querySelector("input[name='hours']").value=TipsManager.getHundredthsRep(this.hours)
+        this.hours = TipsManager.standardizeValue(Number(this.updateForm.HTML.querySelector("input[name='hours']").value))
+        this.updateForm.HTML.querySelector("input[name='hours']").value=TipsManager.getHundredthsRep(TipsManager.moveDecimal(this.hours,-2))
         const newJobId = Number(this.updateForm.HTML.querySelector("select").selectedOptions[0].dataset.jobOption)
         this.job = jobList.find((job) => job.id === newJobId)
-        console.log(newJobId)
-        console.log(jobList)
-        console.log(this.job)
         this.job.employeeWorkHours += this.hours
         TipsManager.updateTips()
         this.updateForm.closeEdit()
@@ -113,9 +110,9 @@ class Employee{
         TipsManager.updateTips()
     }
     setHTML(){
-        const updateFormHTML = Employee.createEmployeeForm.cloneNode(true)
-        this.setFormWithThis(updateFormHTML)
-        this.updateForm = new UpdateForm(this.updateFunction, this.deleteFunction, this.fillFunction, "Employee", this.id, updateFormHTML)
+        const formHTML = Employee.createEmployeeForm.cloneNode(true)
+        this.setFormWithThis(formHTML)
+        this.updateForm = new UpdateForm(this.updateFunction, this.deleteFunction, this.fillFunction, "Employee", this.id, formHTML)
         this.updateForm.HTML.setAttribute("class","updateFormInputStyle")
         this.updateForm.HTML.classList.add("employeeUpdateForm")
         this.updateForm.HTML.querySelector("input[name='checkout']").remove()

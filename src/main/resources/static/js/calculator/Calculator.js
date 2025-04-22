@@ -2,15 +2,17 @@ import CreateController from "./CreateController.js";
 import TipsManager from "./TipsManager.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-    //TipsManager.testMoveDecimal()
     new CreateController()
+    //runTest("VALIDATETEST1.json")
 })
 function runTest(testName){
-    sessionStorage.setItem("state", "true")
-    let testObj = null
-    fetch("test/"+testName).then(res => {
+    fetch("https://tips.brauhcalc.com/test/"+testName).then(res => {
         return res.json()
+    }).then(data => {
+        sessionStorage.setItem("state", "true")
+        sessionStorage.setItem("employeeList", JSON.stringify(data.employeeList))
+        sessionStorage.setItem("jobList", JSON.stringify(data.jobList))
+        sessionStorage.setItem("checkoutList", JSON.stringify(data.checkoutList))
+        new CreateController()
     })
-        .then(data => testObj = JSON.parse(data))
-    console.log(testObj.employeeList)
 }
