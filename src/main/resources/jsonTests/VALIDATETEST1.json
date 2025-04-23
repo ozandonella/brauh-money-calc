@@ -1,17 +1,6 @@
 {
   "employeeList": [
     {
-      "name": "Oscar",
-      "jobId": 0,
-      "job": {
-        "name": "Server",
-        "points": 4,
-        "isServer": true
-      },
-      "hours": 5.59,
-      "tips": 106
-    },
-    {
       "name": "miles",
       "jobId": 5,
       "job": {
@@ -120,6 +109,17 @@
       },
       "hours": 6.92,
       "tips": 131
+    },
+    {
+      "name": "oscar",
+      "jobId": 0,
+      "job": {
+        "name": "Server",
+        "points": 4,
+        "isServer": true
+      },
+      "hours": 5.59,
+      "tips": 106
     },
     {
       "name": "delph",

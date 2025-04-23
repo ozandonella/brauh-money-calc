@@ -1,6 +1,7 @@
 import {jobList} from "./Job.js";
 import {checkoutList} from "./Checkout.js";
 import {employeeList} from "./Employee.js";
+import {saveState} from "./CreateController.js";
 
 class TipsManager{
     static updateTips(){
@@ -9,7 +10,7 @@ class TipsManager{
             //console.log("new: "+checkout.amount)
             return totalTips + checkout.amount
         }, 0)
-        document.getElementById("totalTips").innerText = "Tip Pool: $" + TipsManager.moveDecimal(totalTips,-2)
+        document.getElementById("totalTips").innerText = "Tip Pool: $" + TipsManager.getHundredthsRep(TipsManager.moveDecimal(totalTips,-2))
         sessionStorage.setItem("totalTips", TipsManager.moveDecimal(totalTips,-2))
         //console.log("curr: "+TipsManager.moveDecimal(Math.floor(totalTips),-2))
         //console.log("old: "+totalTips/100)
@@ -56,6 +57,7 @@ class TipsManager{
         }
         tipMap
         .forEach(key => key.emp.setTips(key.tip))
+        //saveState()
     }
     static standardizeValue(value){
         return Math.floor(TipsManager.moveDecimal(value,2))

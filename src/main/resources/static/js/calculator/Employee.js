@@ -20,7 +20,6 @@ class Employee{
         displayConfirmButton()
         this.setHTML()
         TipsManager.updateTips()
-
     }
     static saveState(){
         sessionStorage.setItem("employeeList", JSON.stringify(Employee.employeeList, (key, value) => {
@@ -98,7 +97,6 @@ class Employee{
         this.job.employeeWorkHours += this.hours
         TipsManager.updateTips()
         this.updateForm.closeEdit()
-
     }
     deleteFunction = () => {
         this.updateForm.HTML.remove()
@@ -124,6 +122,5 @@ class Employee{
     }
 
 }
-export const saveState = () => Employee.saveState()
 export const employeeList = Employee.employeeList
 export default Employee

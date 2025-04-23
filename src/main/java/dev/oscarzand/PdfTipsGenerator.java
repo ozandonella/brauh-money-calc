@@ -20,7 +20,7 @@ public class PdfTipsGenerator {
                 public static void convert(Tipout tipout){
         try {
             document = new Document(PageSize.A4, 0, 0, 10, 10);
-            FileOutputStream out = new FileOutputStream("generatedPdfs/TipsRecord(" + tipout.getDate() + ").pdf");
+            FileOutputStream out = new FileOutputStream("C:/Users/Oxsar/Coding/JavaScript/brauh-money-calc/src/main/resources/generatedPdfs/TipsRecord(" + tipout.getDate() + ").pdf");
             PdfWriter.getInstance(document, out);
             document.open();
             setHeader(tipout);

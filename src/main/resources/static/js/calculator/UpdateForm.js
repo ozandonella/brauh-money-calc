@@ -101,4 +101,5 @@ class UpdateForm{
 }
 export const selectedUpdateForm = UpdateForm.selectedUpdateForm
 export const unselectCurrentForm = UpdateForm.unselectCurrentForm
+export const setChildrenDisabled = UpdateForm.setChildrenDisabled
 export default UpdateForm

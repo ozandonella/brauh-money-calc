@@ -3,7 +3,8 @@ const clickHandler = new EventHandler("click")
 //const touchenedHandler = new EventHandler("touchend")
 const CLOUDFLAIR = "https://tips.brauhcalc.com"
 const LOCALHOST = "http://localhost:8080"
-document.addEventListener("DOMContentLoaded", () => {
+
+window.addEventListener("pageshow", (event) => {
     /*console.log(
         JSON.stringify({
             employeeList: JSON.parse(sessionStorage.getItem("employeeList")),
@@ -11,10 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
             jobList: JSON.parse(sessionStorage.getItem("jobList"))
         }, null, 2)
     )*/
-    window.onpopstate = () => {
-        window.alert("farter")
-        history.replaceState(null, "", "https://tips.brauhcalc.com")
-    }
+    if(event.persisted) window.location.assign(window.location.href)
+    console.log(sessionStorage.getItem("preview"))
     document.querySelector("[type = 'date']").valueAsDate = new Date();
     document.getElementById("preview").innerHTML = sessionStorage.getItem("preview");
     const submitButton = document.getElementById("submitButton")

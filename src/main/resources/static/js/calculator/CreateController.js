@@ -1,7 +1,7 @@
 import Job from "./Job.js";
 import Employee from "./Employee.js";
 import Checkout from "./Checkout.js";
-import {unselectCurrentForm } from "./UpdateForm.js";
+import {unselectCurrentForm} from "./UpdateForm.js";
 import {clickHandler, changeHandler} from "../util/EventHandler.js";
 
 class CreateController{
@@ -11,11 +11,13 @@ class CreateController{
         CreateController.startScripts()
     }
     static startScripts(){
+        window.addEventListener("pagehide", saveState)
+        console.log(sessionStorage.getItem("employeeList"))
         clickHandler.appendTo(document.body)
         changeHandler.appendTo(document.body)
         clickHandler.addElement("clickCreateButton", CreateController.createFunction, document.getElementById("createButton"))
         clickHandler.addElement("clickChangeSideList", CreateController.displaySideList, document.getElementById("sideListButton"))
-        clickHandler.addElement("clickConfirmButton", CreateController.confirmButtonPressed, document.getElementById("confirmButton"))
+        clickHandler.addElement("clickConfirmButton", () => window.location.assign("confirm"), document.getElementById("confirmButton"))
         document.addEventListener("keydown", event => {
             if(event.target.classList.contains("disabled")) event.preventDefault()
         })
@@ -30,21 +32,18 @@ class CreateController{
             Checkout.addBaseCheckouts()
         }
     }
-    static saveObjects(){
-        console.log("saving objects")
+    static saveState(){
+        sessionStorage.setItem("state", "true")
         Employee.saveState()
         Job.saveState()
         Checkout.saveState()
-    }
-    static saveState(){
-        sessionStorage.setItem("state", "true")
-        saveObjects()
+        unselectCurrentForm()
         const preview = document.getElementById("lists").cloneNode(true)
         preview.querySelector("#jobListContainer").remove()
         preview.querySelector("#checkoutListContainer").classList.remove("hidden")
         preview.querySelectorAll("button").forEach(el => el.remove())
         preview.querySelectorAll(".editAndDelete").forEach(el => el.remove())
-        preview.querySelectorAll("p[class = '.editColumn']").forEach(el => el.remove())
+        preview.querySelector("p[class = '.editColumn']").remove()
         preview.querySelector("#employeeListHeader").setAttribute("id", "employeePreviewHeader")
         preview.querySelector("#checkoutListHeader").setAttribute("id", "checkoutPreviewHeader")
         preview.querySelectorAll(".employeeUpdateForm, .checkoutUpdateForm").forEach(el => {
@@ -62,6 +61,7 @@ class CreateController{
                 el.querySelector("input[name = 'hours']").setAttribute("value", updateData.get("hours"))
                 el.querySelector("option[value = '"+ updateData.get("job")+"']").setAttribute("selected", "selected")
             }
+
         })
         sessionStorage.setItem("preview", preview.innerHTML)
     }
@@ -69,11 +69,6 @@ class CreateController{
         Job.buildState()
         Checkout.buildState()
         Employee.buildState()
-    }
-    static confirmButtonPressed(){
-        unselectCurrentForm()
-        CreateController.saveState()
-        window.location.assign("confirm.html")
     }
     static displaySideList(){
         const button = document.getElementById("sideListButton")
@@ -133,6 +128,6 @@ export const getIconElement = (className, iconName) => {
     icon.innerText = iconName
     return icon
 }
-export const saveObjects = CreateController.saveObjects
+export const saveState = CreateController.saveState
 export const checkFieldsFilled = CreateController.checkFieldsFilled
 export default CreateController
