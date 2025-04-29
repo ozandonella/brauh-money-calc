@@ -17,16 +17,17 @@ public class PdfTipsGenerator {
     private static final Font columnHeaderCellFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
     private static final Font tableTitleFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
     private static final Font tableCellFont = new Font(Font.FontFamily.TIMES_ROMAN, 13);
-                public static void convert(Tipout tipout){
+    public static void convert(Tipout tipout){
         try {
             document = new Document(PageSize.A4, 0, 0, 10, 10);
-            FileOutputStream out = new FileOutputStream("C:/Users/Oxsar/Coding/JavaScript/brauh-money-calc/src/main/resources/generatedPdfs/TipsRecord(" + tipout.getDate() + ").pdf");
-            PdfWriter.getInstance(document, out);
+            FileOutputStream out = new FileOutputStream("C:/Users/Oxsar/Coding/JavaScript/brauh-money-calc/generatedPdfs/TipsRecord(" + tipout.getDate() + ").pdf");
+            PdfWriter writer = PdfWriter.getInstance(document, out);
             document.open();
             setHeader(tipout);
             setBody(tipout);
             document.close();
             out.close();
+            writer.close();
         }catch (Exception e){
             e.printStackTrace();
         }

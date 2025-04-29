@@ -1,5 +1,6 @@
 package dev.oscarzand;
 import dev.oscarzand.models.Tipout;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -16,7 +17,12 @@ import java.util.Map;
 public class Controller {
 
     @GetMapping("/")
-    public ResponseEntity<Void> redirect(){
+    public ResponseEntity<Void> redirectFromRoot(){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.LOCATION, "calculator");
+        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+    }@GetMapping("/calculator.html")
+    public ResponseEntity<Void> redirectFromOld(){
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.LOCATION, "calculator");
         return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
@@ -52,13 +58,12 @@ public class Controller {
     @GetMapping("/download/{fileName}")
     public ResponseEntity<Resource> findPdf(@PathVariable String fileName){
         try{
-            Resource pdfDownload = new ClassPathResource("generatedPdfs/"+fileName);
+            Resource pdfDownload = new ByteArrayResource(new FileInputStream("C:/Users/Oxsar/Coding/JavaScript/brauh-money-calc/generatedPdfs/" + fileName).readAllBytes());
             HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE);
+            headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
             headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""+fileName+"\"");
             headers.add(HttpHeaders.CONTENT_LENGTH, String.valueOf(pdfDownload.contentLength()));
-            ResponseEntity<Resource> response = new ResponseEntity<>(pdfDownload, headers, HttpStatus.OK);
-            return response;
+            return new ResponseEntity<>(pdfDownload, headers, HttpStatus.OK);
 
         }catch(Exception e){
             e.printStackTrace();

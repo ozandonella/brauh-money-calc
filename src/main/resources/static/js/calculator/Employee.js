@@ -1,28 +1,33 @@
-import Checkout from "./Checkout.js";
-import {checkFieldsFilled, displayConfirmButton} from "./CreateController.js"
-import {findSelectedOptionJob, jobList} from "./Job.js"
-import UpdateForm from "./UpdateForm.js";
+import Checkout from "./Checkout.js"
+import {displayConfirmButton} from "./CreateController.js"
+import {findSelectedOptionJob, getJobs} from "./Job.js"
+import UpdateForm from "../util/UpdateForm.js"
+import UpdateList from "../util/UpdateList.js"
+import {checkFieldsFilled, numberCompare, stringCompare} from "../util/UtilityFunctions.js"
 import TipsManager from "./TipsManager.js";
 class Employee{
     static employeeCount = 0;
     static createEmployeeForm = document.getElementById("createEmployeeForm")
-    static employeeList = []
+    static employeeList = new UpdateList([], document.getElementById("employeeList"), Employee.compareEmployees)
     constructor(name, job, hours){
         this.name = name
         this.job = job
         this.hours = hours
         this.id = Employee.employeeCount
-        Employee.employeeList.push(this)
         Employee.employeeCount++
         this.updateForm = null
         this.tips = 0
         this.job.employeeWorkHours += hours
-        displayConfirmButton()
         this.setHTML()
+        Employee.employeeList.addItem(this)
         TipsManager.updateTips()
+        displayConfirmButton()
     }
     static saveState(){
-        sessionStorage.setItem("employeeList", JSON.stringify(Employee.employeeList, (key, value) => {
+        //console.log("saving")
+        //console.log("list:")
+        //console.log(Employee.employeeList.objectList)
+        sessionStorage.setItem("employeeList", JSON.stringify(Employee.employeeList.objectList, (key, value) => {
             if(value instanceof Employee){
                 return {
                     name: value.name,
@@ -38,14 +43,21 @@ class Employee{
             }
             return value
         }, 2))
+        //console.log("stringified: "+ sessionStorage.getItem("employeeList"))
     }
     static buildState(){
+        //console.log("building")
+        //console.log("parsed: ")
+        //console.log(JSON.parse(sessionStorage.getItem("employeeList")))
+        //console.log("building..")
+        //console.log(getJobs())
         JSON.parse(sessionStorage.getItem("employeeList"), (key, value) => {
-            if(value && value.hours){
-                return new Employee(value.name, jobList.find(job => job.id === value.jobId), TipsManager.standardizeValue(value.hours))
+            if(value && value.job){
+                return new Employee(value.name, getJobs().find(job => job.id === value.jobId), TipsManager.standardizeValue(value.hours))
             }
             return value
         })
+        //console.log(employeeUpdateList.objectList)
     }
     static formCreate(){
         if(!Employee.validateEmployee(Employee.createEmployeeForm)) return
@@ -58,7 +70,10 @@ class Employee{
     }
     
     static validateEmployee(employeeFormElement){
-
+        if(!checkFieldsFilled(employeeFormElement, ["hours"])){
+            console.log("employee must have hours")
+            return false
+        }
         if(!checkFieldsFilled(employeeFormElement, ["name"])){
             console.log("employee must have name")
             return false
@@ -70,7 +85,22 @@ class Employee{
         }
         return true
     }
-
+    static compareEmployees(a, b){
+        const diff = numberCompare(a.job.points, b.job.points)
+        return diff !== 0 ? -diff : stringCompare(a.job.name, b.job.name)
+    }
+    static getEmployees(){
+        return Employee.employeeList.objectList
+    }
+    static updateSelectElements(){
+        const select = document.getElementById("createEmployeeForm").querySelector("select")
+        Employee.employeeList.objectList.forEach(emp => {
+            const newNode = select.cloneNode(true)
+            newNode.classList.add("disabled")
+            emp.updateForm.HTML.replaceChild(newNode, emp.updateForm.HTML.querySelector("select"))
+            emp.updateForm.HTML.querySelector("option[data-job-option = '"+emp.job.id+"']").selected = true
+        })
+    }
     setTips(tips) {
         this.tips = tips
         this.updateForm.HTML.querySelector(".tipOut").innerText = "$" + this.tips
@@ -88,24 +118,24 @@ class Employee{
         this.updateForm.HTML.querySelector("option[data-job-option = '"+this.job.id+"']").selected = true
     }
     updateFunction = () => {
+        if(!checkFieldsFilled(this.updateForm.HTML, ["name", "hours"])) return
         this.name = this.updateForm.HTML.querySelector("input[name='name']").value
         this.job.employeeWorkHours -= this.hours
         this.hours = TipsManager.standardizeValue(Number(this.updateForm.HTML.querySelector("input[name='hours']").value))
         this.updateForm.HTML.querySelector("input[name='hours']").value=TipsManager.getHundredthsRep(TipsManager.moveDecimal(this.hours,-2))
         const newJobId = Number(this.updateForm.HTML.querySelector("select").selectedOptions[0].dataset.jobOption)
-        this.job = jobList.find((job) => job.id === newJobId)
+        this.job = getJobs().find((job) => job.id === newJobId)
         this.job.employeeWorkHours += this.hours
         TipsManager.updateTips()
+        Employee.employeeList.sort()
         this.updateForm.closeEdit()
     }
     deleteFunction = () => {
         this.updateForm.HTML.remove()
         this.job.employeeWorkHours -= this.hours
-        const ind = Employee.employeeList.indexOf(this)
-        Employee.employeeList.splice(ind, 1)
-        if(Employee.employeeList.length > 0) Employee.employeeList[Math.min(ind, Employee.employeeList.length-1)].updateForm.select()
-        displayConfirmButton()
+        Employee.employeeList.removeItem(this)
         TipsManager.updateTips()
+        displayConfirmButton()
     }
     setHTML(){
         const formHTML = Employee.createEmployeeForm.cloneNode(true)
@@ -118,9 +148,11 @@ class Employee{
         tipOut.setAttribute("class","tipOut")
         tipOut.innerText = "$0"
         this.updateForm.HTML.append(tipOut)
-        document.getElementById("employeeList").append(this.updateForm.HTML)
+        //document.getElementById("employeeList").append(this.updateForm.HTML)
     }
 
 }
-export const employeeList = Employee.employeeList
+export const getEmployees = Employee.getEmployees
+export const updateEmployeeSelectElements = Employee.updateSelectElements
+export const employeeUpdateList = Employee.employeeList
 export default Employee

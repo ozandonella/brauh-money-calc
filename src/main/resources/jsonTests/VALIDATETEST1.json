@@ -279,32 +279,38 @@
     {
       "name": "Server",
       "points": 4,
-      "isServer": true
+      "isServer": true,
+      "id": 0
     },
     {
       "name": "Bar",
       "points": 4,
-      "isServer": false
+      "isServer": false,
+      "id": 1
     },
     {
       "name": "Host",
       "points": 4,
-      "isServer": false
+      "isServer": false,
+      "id": 2
     },
     {
       "name": "CH",
       "points": 1.75,
-      "isServer": false
+      "isServer": false,
+      "id": 3
     },
     {
       "name": "BBK",
       "points": 1.75,
-      "isServer": false
+      "isServer": false,
+      "id": 4
     },
     {
       "name": "Busser",
       "points": 1.5,
-      "isServer": false
+      "isServer": false,
+      "id": 5
     }
   ]
 }

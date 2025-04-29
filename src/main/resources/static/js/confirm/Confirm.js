@@ -13,7 +13,6 @@ window.addEventListener("pageshow", (event) => {
         }, null, 2)
     )*/
     if(event.persisted) window.location.assign(window.location.href)
-    console.log(sessionStorage.getItem("preview"))
     document.querySelector("[type = 'date']").valueAsDate = new Date();
     document.getElementById("preview").innerHTML = sessionStorage.getItem("preview");
     const submitButton = document.getElementById("submitButton")
@@ -50,7 +49,7 @@ const postData = () => {
             return val
         }), 
         checkoutList: JSON.parse(sessionStorage.getItem("checkoutList"))
-    }, 2)
+    }, null, 2)
     fetch(CLOUDFLAIR+"/download", {
         method: "POST",
         headers: {
@@ -63,7 +62,7 @@ const postData = () => {
         return res.json()
     })
     .then(data => {
-        window.location.href = data.pdfUrl
+        window.location.assign(data.pdfUrl)
         console.log(data)
     })
 }

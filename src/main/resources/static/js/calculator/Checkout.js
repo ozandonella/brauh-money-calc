@@ -1,22 +1,23 @@
-import {checkFieldsFilled} from "./CreateController.js"
+import {checkFieldsFilled} from "../util/UtilityFunctions.js"
 import TipsManager from "./TipsManager.js"
-import UpdateForm from "./UpdateForm.js"
+import UpdateForm from "../util/UpdateForm.js"
+import UpdateList from "../util/UpdateList.js";
 class Checkout{
     static checkoutCount = 0
     static createCheckoutForm = document.getElementById("createCheckoutForm")
-    static checkoutList = []
+    static checkoutList = new UpdateList([], document.getElementById("checkoutList"), Checkout.compareCheckouts)
     constructor(name, amount){
         this.name = name
         this.amount = amount
         this.id = Checkout.checkoutCount
         this.updateForm = null
         this.setHTML()
-        Checkout.checkoutList.push(this)
+        Checkout.checkoutList.addItem(this)
         Checkout.checkoutCount++
         TipsManager.updateTips()
     }
     static saveState(){
-        sessionStorage.setItem("checkoutList", JSON.stringify(Checkout.checkoutList, (key, value) => {
+        sessionStorage.setItem("checkoutList", JSON.stringify(Checkout.checkoutList.objectList, (key, value) => {
             if(value instanceof Checkout){
                 return {
                     name: value.name,
@@ -47,6 +48,17 @@ class Checkout{
     static getCreateForm(){
         return Checkout.createCheckoutForm
     }
+    static compareCheckouts(a, b){
+        const getVal = (checkout) => {
+            if(checkout.name.toLowerCase() === "bar cash") return Checkout.checkoutCount+1
+            if(checkout.name.toLowerCase() === "server cash") return Checkout.checkoutCount+2
+            return checkout.id
+        }
+        return getVal(a) - getVal(b)
+    }
+    static getCheckouts(){
+        return Checkout.checkoutList.objectList
+    }
     updateFunction = () => {
         if(!checkFieldsFilled(this.updateForm.HTML, ["name","amount"])) return
         this.name = this.updateForm.HTML.querySelector("input[name='name']").value
@@ -56,10 +68,7 @@ class Checkout{
         TipsManager.updateTips()
     }
     deleteFunction = () => {
-        this.updateForm.HTML.remove()
-        let ind = Checkout.checkoutList.indexOf(this)
-        Checkout.checkoutList.splice(ind, 1)
-        if(Checkout.checkoutList.length > 0) Checkout.checkoutList[Math.min(ind,Checkout.checkoutList.length-1)].updateForm.select()
+        Checkout.checkoutList.removeItem(this)
         TipsManager.updateTips()
     }
     fillFunction = () => {
@@ -77,8 +86,7 @@ class Checkout{
         this.updateForm = new UpdateForm(this.updateFunction, this.deleteFunction, this.fillFunction, "Checkout", this.id, formHTML)
         this.updateForm.HTML.setAttribute("class", "checkoutUpdateForm")
         this.updateForm.HTML.classList.add("updateFormInputStyle")
-        document.getElementById("checkoutList").append(this.updateForm.HTML)
     }
 }
-export let checkoutList = Checkout.checkoutList
+export const getCheckouts = Checkout.getCheckouts
 export default Checkout

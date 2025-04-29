@@ -1,8 +1,10 @@
 import Job from "./Job.js";
 import Employee from "./Employee.js";
 import Checkout from "./Checkout.js";
-import {unselectCurrentForm} from "./UpdateForm.js";
+import {unselectCurrentForm} from "../util/UpdateForm.js";
 import {clickHandler, changeHandler} from "../util/EventHandler.js";
+import {checkFieldsFilled} from "../util/UtilityFunctions.js"
+import employee from "./Employee.js";
 
 class CreateController{
     static confirmButton = document.getElementById("confirmButton")
@@ -12,7 +14,7 @@ class CreateController{
     }
     static startScripts(){
         window.addEventListener("pagehide", saveState)
-        console.log(sessionStorage.getItem("employeeList"))
+        //console.log(sessionStorage.getItem("employeeList"))
         clickHandler.appendTo(document.body)
         changeHandler.appendTo(document.body)
         clickHandler.addElement("clickCreateButton", CreateController.createFunction, document.getElementById("createButton"))
@@ -22,11 +24,15 @@ class CreateController{
             if(event.target.classList.contains("disabled")) event.preventDefault()
         })
         document.getElementById("createForm").addEventListener("change", CreateController.displayForm)
+        document.getElementById("lists").addEventListener("focusin", (event) => {
+            if(event.target.tagName === "INPUT") event.target.select()
+        })
         const employeeRadio = document.getElementById("createForm").querySelector('input[value="Employee"]')
         employeeRadio.checked = true
         employeeRadio.dispatchEvent(new Event("change", {bubbles: true}))
         Job.addListeners()
-        if(sessionStorage.getItem("state")) CreateController.buildState()
+        console.log(sessionStorage.getItem("state"))
+        if(sessionStorage.getItem("state") === "true") CreateController.buildState()
         else{
             Job.addBaseJobs()
             Checkout.addBaseCheckouts()
@@ -66,6 +72,10 @@ class CreateController{
         sessionStorage.setItem("preview", preview.innerHTML)
     }
     static buildState(){
+        console.log("building state")
+        Job.jobList.clearList()
+        Checkout.checkoutList.clearList()
+        Employee.employeeList.clearList()
         Job.buildState()
         Checkout.buildState()
         Employee.buildState()
@@ -108,26 +118,10 @@ class CreateController{
         else if(createTarget === "Job") objClass = Job
         objClass.formCreate()
     }
-    static checkFieldsFilled(formElement, fieldNames){
-        const formData = new FormData(formElement)
-        for(const name of fieldNames) if(!formData.get(name)) return false
-        return true
-    }
-    static preventInteraction = (event) => {
-        event.preventDefault()
-        event.stopPropagation()
-    }
 }
 export const displayConfirmButton = () => {
-    if(Employee.employeeList.length === 0) CreateController.confirmButton.classList.add("hidden")
+    if(Employee.getEmployees().length === 0) CreateController.confirmButton.classList.add("hidden")
     else CreateController.confirmButton.classList.remove("hidden")  
 }
-export const getIconElement = (className, iconName) => {
-    const icon = document.createElement("span")
-    icon.setAttribute("class", className)
-    icon.innerText = iconName
-    return icon
-}
 export const saveState = CreateController.saveState
-export const checkFieldsFilled = CreateController.checkFieldsFilled
 export default CreateController

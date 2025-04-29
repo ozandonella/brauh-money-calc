@@ -1,5 +1,5 @@
-import { getIconElement } from "./CreateController.js"
-import { clickHandler } from "../util/EventHandler.js"
+import {getIconElement} from "./UtilityFunctions.js";
+import { clickHandler } from "./EventHandler.js"
 class UpdateForm{
     static selectedUpdateForm
     constructor(updateFunction, deleteFunction, fillFunction, className, id,  formElement){
@@ -31,11 +31,6 @@ class UpdateForm{
         clickHandler.addElement("delete"+this.className+this.id, this.deleteFunction, deleteButton)
         clickHandler.addElement("edit"+this.className+this.id, this.openEdit, editButton)
         clickHandler.addElement("select"+this.className+this.id, this.select, this.HTML)
-        
-        //touchenedHandler.addElement("check"+this.className+this.id, this.updateFunction, this.updateButtonHTML)
-        //touchenedHandler.addElement("delete"+this.className+this.id, this.deleteFunction, deleteButton)
-        //touchenedHandler.addElement("edit"+this.className+this.id, this.openEdit, editButton)
-        //touchenedHandler.addElement("select"+this.className+this.id, this.select, this.HTML)
 
         UpdateForm.setChildrenDisabled(this.HTML, true)
     }
@@ -63,7 +58,7 @@ class UpdateForm{
         this.HTML.classList.add("editing")
         UpdateForm.setChildrenDisabled(this.HTML, false)
         this.displayButton(true)
-        this.HTML.querySelector("input").focus()
+        this.HTML.querySelector("input[type = 'number']").focus()
     }
     closeEdit(){
         this.HTML.classList.remove("editing")
@@ -99,7 +94,5 @@ class UpdateForm{
         for(const el of Array.from(element.children)) UpdateForm.setElementDisabled(el, isDisabled)
     }
 }
-export const selectedUpdateForm = UpdateForm.selectedUpdateForm
 export const unselectCurrentForm = UpdateForm.unselectCurrentForm
-export const setChildrenDisabled = UpdateForm.setChildrenDisabled
 export default UpdateForm

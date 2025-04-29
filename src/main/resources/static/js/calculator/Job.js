@@ -1,63 +1,72 @@
-import {checkFieldsFilled} from "./CreateController.js"
+import {checkFieldsFilled, numberCompare} from "../util/UtilityFunctions.js"
 import {changeHandler} from "../util/EventHandler.js"
-import UpdateForm from "./UpdateForm.js"
-import {employeeList} from "./Employee.js"
+import UpdateForm from "../util/UpdateForm.js"
+import UpdateList from "../util/UpdateList.js"
+import {getEmployees, employeeUpdateList, updateEmployeeSelectElements} from "./Employee.js"
 import TipsManager from "./TipsManager.js"
 
 class Job{
     static jobCount = 0
-    static jobList = []
+    static jobList = new UpdateList([], document.getElementById("jobList"), Job.compareJobs)
     static createJobForm = document.getElementById("createJobForm")
     static createEmployeeJobSelect = document.getElementById("createEmployeeForm").querySelector("select")
-    constructor(name, points, isServer){
-        this.id = Job.jobCount
+    constructor(name, points, isServer, id = Job.jobCount){
+        this.id = id
         this.name = name
         this.points = points
         this.isServer = isServer
         this.optionHTML = null
         this.updateForm = null
         this.employeeWorkHours = 0
-        Job.jobList.push(this)
         this.setHTML()
-        Job.createEmployeeJobSelect.append(this.optionHTML)
-        Job.jobCount++
+        Job.jobList.addItem(this)
+        Job.updateJobSelect()
+        updateEmployeeSelectElements()
+        Job.jobCount = Math.max(Job.jobCount, id) + 1
     }
     static saveState(){
-        sessionStorage.setItem("jobList", JSON.stringify(Job.jobList, (key, value) => {
+        sessionStorage.setItem("jobList", JSON.stringify(Job.jobList.objectList, (key, value) => {
             if(value instanceof Job){
                 return {
                     name: value.name,
                     points: TipsManager.moveDecimal(value.points,-2),
-                    isServer: value.isServer
+                    isServer: value.isServer,
+                    id: value.id
                 };
             }
             return value;
         }, 2))
     }
     static buildState(){
+        //console.log("saved jobs: ")
+        //console.log(sessionStorage.getItem("jobList"))
         JSON.parse(sessionStorage.getItem("jobList"), (key, value) => {
-            if(value && value.name) return new Job(value.name, TipsManager.standardizeValue(value.points), value.isServer)
+            if(value && value.name) {
+                value = new Job(value.name, TipsManager.standardizeValue(value.points), value.isServer, value.id)
+            }
             return value
         })
+        Job.updateCheckoutInputDisplay()
+        //console.log("jobs: ")
+        //console.log(getJobs())
     }
     static addListeners(){
-        changeHandler.addElement("changedJobSelect", Job.jobUpdate, Job.createEmployeeJobSelect)
+        changeHandler.addElement("changedJobSelect", Job.updateCheckoutInputDisplay, Job.createEmployeeJobSelect)
         changeHandler.addElement("changedCreateFormIsServer", Job.createIsServerUpdate, document.getElementById("isServer"))
     }
     static formCreate(){
         if(!Job.validateJobForm()) return
         const fromData = new FormData(Job.createJobForm)
-        new Job(fromData.get("name"), TipsManager.standardizeValue(Number(fromData.get("points"))), fromData.get("isServer"))
-        Job.createEmployeeJobSelect.selectedIndex = Job.createEmployeeJobSelect.options.length - 1
+        const job = new Job(fromData.get("name"), TipsManager.standardizeValue(Number(fromData.get("points"))), fromData.get("isServer")!==null)
         Job.createJobForm.reset()
         Job.createJobForm.querySelector("input.checkbox").dispatchEvent(new Event("change", {bubbles : true}))
-        Job.jobUpdate()
+        Job.updateCheckoutInputDisplay()
         const employeeRadio = document.getElementById("createForm").querySelector('input[value="Employee"]')
         employeeRadio.checked = true
-        employeeRadio.dispatchEvent(new Event("change", {bubbles: true})) 
+        employeeRadio.dispatchEvent(new Event("change", {bubbles: true}))
+        job.optionHTML.selected = true
     }
     static validateJobForm(){
-        console.log(Job.createJobForm)
         if(!checkFieldsFilled(Job.createJobForm, ["name", "points"])){
             console.log("job must have name and point value")
             return false
@@ -73,9 +82,9 @@ class Job{
         new Job("Busser", 150, false)
     }
     static findSelectedOptionJob(){
-        return Job.jobList.find(job => job.optionHTML.selected)
+        return Job.jobList.objectList.find(job => job.optionHTML.selected)
     }
-    static jobUpdate(){
+    static updateCheckoutInputDisplay(){
         const employeeCheckoutElement = document.getElementById("employeeCheckout")
         if(Job.findSelectedOptionJob().isServer) employeeCheckoutElement.classList.remove("hidden")
         else employeeCheckoutElement.classList.add("hidden")
@@ -96,16 +105,25 @@ class Job{
         Job.setLabel(label, checkbox.checked)
         label.innerText = "Server: " + label.innerText
     }
+
+    static updateJobSelect(){
+        const selectedJob = findSelectedOptionJob()
+        const oldSelect = document.getElementById("createEmployeeForm").querySelector("select")
+        const newSelect = oldSelect.cloneNode()
+        Job.jobList.objectList.forEach(job => newSelect.appendChild(job.optionHTML))
+        document.getElementById("createEmployeeForm").replaceChild(newSelect, oldSelect)
+        selectedJob.optionHTML.selected = true
+    }
+    static compareJobs(a, b){
+        return -numberCompare(a.points, b.points)
+    }
+    static getJobs(){
+        return Job.jobList.objectList
+    }
     isServerUpdate = () => {
         const label = this.updateForm.HTML.querySelector("label")
         const checkbox = this.updateForm.HTML.querySelector("input.checkbox")
         Job.setLabel(label, checkbox.checked)
-    }
-    static printWorkHours(){
-        jobList.forEach((job) => console.log(job.name +" "+job.employeeWorkHours))
-    }
-    static getCreateForm(){
-        return Job.createJobForm
     }
     fillOptionWithThis(jobOptionHtml){
         jobOptionHtml.innerText = this.name+"("+TipsManager.getHundredthsRep(TipsManager.moveDecimal(this.points,-2))+")"
@@ -140,67 +158,61 @@ class Job{
     }
 
     updateFunction = () => {
+        if(!checkFieldsFilled(this.updateForm.HTML, ["name", "points"])) return
         const form = new FormData(this.updateForm.HTML)
-        for(const [key, value] of form.entries()){
-            this[key] = value
-            console.log(key)
-        }
-        this.points = TipsManager.standardizeValue(this.points)
-        this.isServer = this.updateForm.HTML.querySelector("input.checkbox").checked
+        this.name = form.get("name")
+        this.points = TipsManager.standardizeValue(Number(form.get("points")))
+        this.updateForm.HTML.querySelector("input[name='points']").value = TipsManager.getHundredthsRep(TipsManager.moveDecimal(this.points,-2))
+        this.isServer = form.get("isServer")!==null
         this.fillOptionWithThis(this.optionHTML)
-        /*UPDATE SERVER LIST LOGIC*/
-        employeeList.forEach((employee) => {
-            const currOption = employee.updateForm.HTML.querySelector("[data-job-option = '"+this.id+"']")
-            currOption.innerText = this.name + "(" + TipsManager.getHundredthsRep(TipsManager.moveDecimal(this.points,-2)) + ")"
-        })
-        TipsManager.updateTips()
         this.updateForm.closeEdit()
-        Job.jobUpdate()
+        Job.jobList.sort()
+        Job.updateJobSelect()
+        /*UPDATE SERVER LIST LOGIC*/
+        updateEmployeeSelectElements()
+        employeeUpdateList.sort()
+        TipsManager.updateTips()
+        Job.updateCheckoutInputDisplay()
     }
     deleteFunction = () => {
-        if(Job.jobList.length === 1){
+        if(Job.jobList.objectList.length === 1){
             console.log("must have at least one job")
             return
         }
-        this.updateForm.HTML.remove()
-        this.optionHTML.remove()
-
+        this.optionHTML.remove() //removing option from create employee select
+        let ind = Math.min(Job.jobList.objectList.indexOf(this), Job.jobList.objectList.length-2)
+        Job.jobList.removeItem(this)
+        const newJob = Job.jobList.objectList[ind]
+        if(this.optionHTML.selected) newJob.optionHTML.selected = true
+        Job.updateJobSelect()
         /*UDATE EMPLOYEE JOBS*/
-        employeeList.forEach((employee) => {
-            const currSelect = employee.updateForm.HTML.querySelector("select")
-            currSelect.querySelector("[data-job-option = '"+this.id+"']").remove()
-            if(employee.job.id === this.id){
-                this.employeeWorkHours -= employee.hours
-                employee.job = Job.jobList.find((job) => job.id === currSelect.selectedOptions[0].dataset.jobOption)
-                employee.job.employeeWorkHours += employee.hours
-            } 
+        getEmployees().forEach(emp => {
+            if(emp.job.id === this.id) {
+                newJob.employeeWorkHours += emp.hours
+                emp.job = newJob
+            }
         })
-        if(!Job.findSelectedOptionJob()) Job.createEmployeeJobSelect.selectedIndex = 0;
-        const ind = Job.jobList.indexOf(this)
-        Job.jobList.splice(ind, 1)
-        Job.jobList[Math.min(ind, Job.jobList.length-1)].updateForm.select()
+        updateEmployeeSelectElements() //removes option from employeeUpdateForms
+        employeeUpdateList.sort()
         TipsManager.updateTips()
-        Job.jobUpdate()
+        Job.updateCheckoutInputDisplay()
     }
     setHTML(){
-        const createJobOptionFromThis = () => {
-            const option = document.createElement("option")
-            option.setAttribute("data-job-option", String(this.id))
-            this.fillOptionWithThis(option)
-            return option
-        }
-        employeeList.forEach((employee) => employee.updateForm.HTML.querySelector("select").append(createJobOptionFromThis()))
-        this.optionHTML = createJobOptionFromThis()
+        this.optionHTML = document.createElement("option")
+        this.optionHTML.setAttribute("data-job-option", String(this.id))
+        this.fillOptionWithThis(this.optionHTML)
+        this.optionHTML.selected = true
+
+
         const formHTML = Job.createJobForm.cloneNode(true)
         this.setFormWithThis(formHTML)
         this.updateForm = new UpdateForm(this.updateFunction, this.deleteFunction, this.fillFunction, "Job", this.id, formHTML)
         this.updateForm.HTML.setAttribute("class","jobUpdateForm")
-        this.updateForm.HTML.classList.add("updateFormInputStyle")        
-        document.getElementById("jobList").append(this.updateForm.HTML)
+        this.updateForm.HTML.classList.add("updateFormInputStyle")
         if(!UpdateForm.selectedUpdateForm) this.updateForm.HTML.dispatchEvent(new Event("click", {bubbles: true}))
         
     }
 }
 export const findSelectedOptionJob = Job.findSelectedOptionJob
-export const jobList = Job.jobList
+export const getJobs = Job.getJobs
 export default Job
