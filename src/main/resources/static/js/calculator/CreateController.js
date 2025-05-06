@@ -4,7 +4,6 @@ import Checkout from "./Checkout.js";
 import {unselectCurrentForm} from "../util/UpdateForm.js";
 import {clickHandler, changeHandler} from "../util/EventHandler.js";
 import {checkFieldsFilled} from "../util/UtilityFunctions.js"
-import employee from "./Employee.js";
 
 class CreateController{
     static confirmButton = document.getElementById("confirmButton")
@@ -49,7 +48,7 @@ class CreateController{
         preview.querySelector("#checkoutListContainer").classList.remove("hidden")
         preview.querySelectorAll("button").forEach(el => el.remove())
         preview.querySelectorAll(".editAndDelete").forEach(el => el.remove())
-        preview.querySelector("p[class = '.editColumn']").remove()
+        preview.querySelectorAll("p[class = '.editColumn']").forEach(el => el.remove())
         preview.querySelector("#employeeListHeader").setAttribute("id", "employeePreviewHeader")
         preview.querySelector("#checkoutListHeader").setAttribute("id", "checkoutPreviewHeader")
         preview.querySelectorAll(".employeeUpdateForm, .checkoutUpdateForm").forEach(el => {
@@ -79,6 +78,7 @@ class CreateController{
         Job.buildState()
         Checkout.buildState()
         Employee.buildState()
+
     }
     static displaySideList(){
         const button = document.getElementById("sideListButton")

@@ -13,7 +13,9 @@ window.addEventListener("pageshow", (event) => {
         }, null, 2)
     )*/
     if(event.persisted) window.location.assign(window.location.href)
-    document.querySelector("[type = 'date']").valueAsDate = new Date();
+    //console.log(new Date())
+    //console.log(new Date(Date.now()))
+    document.querySelector("[type = 'date']").valueAsDate = new Date(Date.now());
     document.getElementById("preview").innerHTML = sessionStorage.getItem("preview");
     const submitButton = document.getElementById("submitButton")
 
@@ -32,7 +34,8 @@ const postData = () => {
         jobList: JSON.parse(sessionStorage.getItem("jobList"), (key, val) => {
             if(val.name) return {
                 name: val.name,
-                points: val.points
+                points: val.points,
+                rate: val.rate
             }
             return val
         }), 
@@ -41,7 +44,8 @@ const postData = () => {
                 name: val.name,
                 job: {
                     name: val.job.name,
-                    points: val.job.points
+                    points: val.job.points,
+                    rate: val.job.rate
                 },
                 hours: val.hours,
                 tips: val.tips

@@ -27,8 +27,8 @@ class TipsManager{
         const pointHourly = totalPointHours === 0 ? 0 : TipsManager.moveDecimal(totalTips,2)/totalPointHours
         //console.log("old: " +((totalTips*100)/totalPointHours))
         //console.log("new: " + TipsManager.moveDecimal(totalTips,2)/totalPointHours)
-        document.getElementById("hourlyPerPoint").innerText = "Rate(1.00) >= $" + TipsManager.getHundredthsRep(pointHourly)
         sessionStorage.setItem("singlePointHourly", TipsManager.getHundredthsRep(pointHourly))
+        TipsManager.updateRateList(pointHourly)
         const employees = getEmployees()
         if(!employees||getEmployees().length === 0) return
         const precisePointHourly =  TipsManager.moveDecimal(pointHourly,6)
@@ -109,6 +109,32 @@ class TipsManager{
         for(let i= -6; i <= 6; i++){
             console.log(testTwo[i+6] + "==" + TipsManager.moveDecimal(54321.12345,i) + " -> " + String(testTwo[i+6] === TipsManager.moveDecimal(54321.12345,i)))
         }
+    }
+    static updateRateList(baseRate){
+        const rateListHTML = document.getElementById("rateList")
+        rateListHTML.replaceChildren()
+        let curr = document.createElement("div")
+        const pointP = document.createElement("p")
+        const rateP = document.createElement("p")
+        curr.appendChild(pointP)
+        curr.appendChild(rateP)
+        curr.setAttribute("class", "rateDiv")
+        const baseRateMath = TipsManager.standardizeValue(TipsManager.getHundredthsRep(baseRate))
+        const seen = []
+        getJobs().forEach(job => {
+            const displayRate = TipsManager.getHundredthsRep(TipsManager.moveDecimal(job.points * baseRateMath, -4))
+            job.rate = Number(displayRate)
+            const points = TipsManager.getHundredthsRep(TipsManager.moveDecimal(job.points, -2))
+            if(job.employeeWorkHours>0 && !seen.find(p => p === points)){
+                pointP.innerText = points
+                rateP.innerText = "$"+displayRate + "/hr"
+                rateListHTML.appendChild(curr.cloneNode(true))
+                seen.push(points)
+            }
+        })
+    }
+    static saveState(){
+
     }
 }
 export default TipsManager

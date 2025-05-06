@@ -125,7 +125,6 @@ label.checkbox{
 #confirmButton{
     color: white;
     border: 1px solid rgb(86, 86, 86);
-    border-left: none;
     padding: 0;
     height: 35px;
     font-size: 18px;
@@ -160,15 +159,23 @@ label.checkbox{
     flex-shrink: 0;
 }
 #employeeListContainer{
+    height: fit-content;
     flex: 3;
-
+}
+#rateListContainer{
+    margin-top: 33px;
 }
 #lists > div{
-    border: 1px solid rgb(86, 86, 86);
     height: fit-content;
     display: flex;
     flex-direction: column;
     justify-items: start;
+}
+#employeeListContainer,
+#rateListContainer,
+#jobListContainer,
+#checkoutListContainer{
+    border: 1px solid rgb(86, 86, 86);
 }
 ul{
     margin: 0;
@@ -188,7 +195,9 @@ ul{
 #employeePreviewHeader,
 #checkoutListHeader,
 #jobListHeader,
-#employeeListHeader{ 
+#employeeListHeader,
+#rateListHeader,
+.rateDiv{
     box-sizing: border-box;
     height: 35px;
     width: 100%;
@@ -208,6 +217,9 @@ ul{
 }
 .jobUpdateForm, #jobListHeader{
     grid-template-columns: 70px 2fr 1fr 1fr;
+}
+.rateDiv, #rateListHeader{
+    grid-template-columns: 1fr 1fr;
 }
 .updateFormInputStyle label.checkbox,
 .updateFormInputStyle input,
@@ -237,13 +249,13 @@ P{
     text-align: center;
     
 }
-#jobListContainer p,
-#checkoutListContainer p{
+#jobListHeader p,
+#checkoutListHeader p,
+#checkoutPreviewHeader{
     background-color: rgb(31, 95, 127);
 }
-#checkoutListContainer p[id = "totalTips"],
-#jobListContainer p[id = "hourlyPerPoint"]{
-    background-color: rgb(8,8,8);
+#rateListHeader p{
+    background-color: rgb(103, 39, 114)
 }
 #employeeListContainer p{
     background-color: rgb(28, 47, 105);

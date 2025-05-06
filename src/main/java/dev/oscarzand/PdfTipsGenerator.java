@@ -7,9 +7,11 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 
 import dev.oscarzand.models.Checkout;
 import dev.oscarzand.models.Employee;
+import dev.oscarzand.models.Job;
 import dev.oscarzand.models.Tipout;
 
 public class PdfTipsGenerator {
@@ -78,12 +80,13 @@ public class PdfTipsGenerator {
             employeeTable.addCell(getStringCell("JOB", columnHeaderCellFont, true));
             employeeTable.addCell(getStringCell("HOURS", columnHeaderCellFont,true));
             employeeTable.addCell(getStringCell("TIPS", columnHeaderCellFont, true));
-
+            ArrayList<Job> rateJobs = new ArrayList<>();
             for(Employee emp : tipout.getEmployeeList()){
                 employeeTable.addCell(getStringCell(emp.getName(), tableCellFont, true));
                 employeeTable.addCell(getStringCell(emp.getJob().getName() + "("+emp.getJob().getPoints()+")", tableCellFont, true));
                 employeeTable.addCell(getStringCell(String.valueOf(emp.getHours()), tableCellFont,true));
                 employeeTable.addCell(getStringCell("$"+(int)emp.getTips(), tableCellFont, true));
+                if(rateJobs.stream().noneMatch(job -> job.getPoints() == emp.getJob().getPoints())) rateJobs.add(emp.getJob());
             }
 
             PdfPCell employeeListCell = new PdfPCell();
@@ -104,6 +107,19 @@ public class PdfTipsGenerator {
 
             checkoutTable.addCell(getStringCell("TOTAL:", columnHeaderCellFont, false));
             checkoutTable.addCell(getStringCell("$"+tipout.getTotalTips(), columnHeaderCellFont, false));
+
+            checkoutTable.addCell(getStringCell(" ", columnHeaderCellFont, false));
+            checkoutTable.addCell(getStringCell(" ", columnHeaderCellFont, false));
+
+            checkoutTable.addCell(getStringCell("POINTS", columnHeaderCellFont, true));
+            checkoutTable.addCell(getStringCell("HOURLY", columnHeaderCellFont, true));
+
+            for(Job job : rateJobs){
+                System.out.println(job);
+                System.out.println(job.getRate());
+                checkoutTable.addCell(getStringCell(String.valueOf(job.getPoints()), tableCellFont, true));
+                checkoutTable.addCell(getStringCell("$"+job.getRate(), tableCellFont, true));
+            }
 
             checkoutTable.addCell(getStringCell("RATE(1.0):", columnHeaderCellFont, false));
             checkoutTable.addCell(getStringCell("$"+tipout.getSinglePointHourly(), columnHeaderCellFont, false));

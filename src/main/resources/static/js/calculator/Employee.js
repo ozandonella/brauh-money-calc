@@ -35,7 +35,7 @@ class Employee{
                     job: {
                         name: value.job.name,
                         points: TipsManager.moveDecimal(value.job.points,-2),
-                        isServer: value.job.isServer
+                        rate: value.job.rate
                     },
                     hours: TipsManager.moveDecimal(value.hours,-2),
                     tips: value.tips

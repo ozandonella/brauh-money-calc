@@ -18,6 +18,7 @@ class Job{
         this.optionHTML = null
         this.updateForm = null
         this.employeeWorkHours = 0
+        this.rate = 0
         this.setHTML()
         Job.jobList.addItem(this)
         Job.updateJobSelect()
@@ -31,7 +32,8 @@ class Job{
                     name: value.name,
                     points: TipsManager.moveDecimal(value.points,-2),
                     isServer: value.isServer,
-                    id: value.id
+                    id: value.id,
+                    rate: value.rate
                 };
             }
             return value;
@@ -42,7 +44,7 @@ class Job{
         //console.log(sessionStorage.getItem("jobList"))
         JSON.parse(sessionStorage.getItem("jobList"), (key, value) => {
             if(value && value.name) {
-                value = new Job(value.name, TipsManager.standardizeValue(value.points), value.isServer, value.id)
+                value = new Job(value.name , TipsManager.standardizeValue(value.points), value.isServer, value.id)
             }
             return value
         })
@@ -60,11 +62,11 @@ class Job{
         const job = new Job(fromData.get("name"), TipsManager.standardizeValue(Number(fromData.get("points"))), fromData.get("isServer")!==null)
         Job.createJobForm.reset()
         Job.createJobForm.querySelector("input.checkbox").dispatchEvent(new Event("change", {bubbles : true}))
-        Job.updateCheckoutInputDisplay()
         const employeeRadio = document.getElementById("createForm").querySelector('input[value="Employee"]')
         employeeRadio.checked = true
         employeeRadio.dispatchEvent(new Event("change", {bubbles: true}))
         job.optionHTML.selected = true
+        Job.updateCheckoutInputDisplay()
     }
     static validateJobForm(){
         if(!checkFieldsFilled(Job.createJobForm, ["name", "points"])){
