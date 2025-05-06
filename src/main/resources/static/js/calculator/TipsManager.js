@@ -119,10 +119,11 @@ class TipsManager{
         curr.appendChild(pointP)
         curr.appendChild(rateP)
         curr.setAttribute("class", "rateDiv")
-        const baseRateMath = TipsManager.standardizeValue(TipsManager.getHundredthsRep(baseRate))
+        const baseRateMath = TipsManager.moveDecimal(baseRate,6)
+        console.log(baseRateMath)
         const seen = []
         getJobs().forEach(job => {
-            const displayRate = TipsManager.getHundredthsRep(TipsManager.moveDecimal(job.points * baseRateMath, -4))
+            const displayRate = TipsManager.getHundredthsRep(TipsManager.moveDecimal(job.points * baseRateMath, -8))
             job.rate = Number(displayRate)
             const points = TipsManager.getHundredthsRep(TipsManager.moveDecimal(job.points, -2))
             if(job.employeeWorkHours>0 && !seen.find(p => p === points)){
@@ -134,7 +135,7 @@ class TipsManager{
         })
     }
     static saveState(){
-
+        
     }
 }
 export default TipsManager
