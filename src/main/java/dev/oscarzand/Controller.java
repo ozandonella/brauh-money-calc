@@ -58,7 +58,7 @@ public class Controller {
     @GetMapping("/download/{fileName}")
     public ResponseEntity<Resource> findPdf(@PathVariable String fileName){
         try{
-            Resource pdfDownload = new ByteArrayResource(new FileInputStream("C:/Users/Oxsar/Coding/JavaScript/brauh-money-calc/generatedPdfs/" + fileName).readAllBytes());
+            Resource pdfDownload = new ByteArrayResource(new FileInputStream("generatedPdfs/" + fileName).readAllBytes());
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
             headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""+fileName+"\"");

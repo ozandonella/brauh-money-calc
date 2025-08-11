@@ -22,7 +22,7 @@ public class PdfTipsGenerator {
     public static void convert(Tipout tipout){
         try {
             document = new Document(PageSize.A4, 0, 0, 10, 10);
-            FileOutputStream out = new FileOutputStream("C:/Users/Oxsar/Coding/JavaScript/brauh-money-calc/generatedPdfs/TipsRecord(" + tipout.getDate() + ").pdf");
+            FileOutputStream out = new FileOutputStream("generatedPdfs/TipsRecord(" + tipout.getDate() + ").pdf");
             PdfWriter writer = PdfWriter.getInstance(document, out);
             document.open();
             setHeader(tipout);
@@ -40,7 +40,7 @@ public class PdfTipsGenerator {
             table.setWidthPercentage(100);
             table.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-            table.addCell(new Jpeg(new FileInputStream("C:/Users/Oxsar/OneDrive/Pictures/Screenshots/Money.jpg").readAllBytes()));
+            table.addCell(new Jpeg(new FileInputStream("src/main/resources/static/assets/Money.jpg").readAllBytes()));
 
             Paragraph title = new Paragraph();
             title.setFont(new Font(Font.FontFamily.TIMES_ROMAN, 32, Font.BOLD));
