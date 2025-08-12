@@ -15,7 +15,10 @@ window.addEventListener("pageshow", (event) => {
     if(event.persisted) window.location.assign(window.location.href)
     //console.log(new Date())
     //console.log(new Date(Date.now()))
-    document.querySelector("[type = 'date']").valueAsDate = new Date(Date.now());
+    const now = new Date();
+    const utcMidnight = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()))
+    console.log(utcMidnight);
+    document.querySelector("[type = 'date']").valueAsDate = utcMidnight
     document.getElementById("preview").innerHTML = sessionStorage.getItem("preview");
     const submitButton = document.getElementById("submitButton")
 
@@ -23,6 +26,14 @@ window.addEventListener("pageshow", (event) => {
     clickHandler.appendTo(document.body)
 })
 
+const displaySubmitMessage = (status) => {
+    const msg = document.createElement("h1")
+    msg.setAttribute("id", "submitMessage")
+    if(status) msg.innerText = "Success!! Hello from Buffalo NY :)"
+    else msg.innerText = "There was an issue :("
+    document.querySelector("body").insertBefore(msg, document.getElementById("preview"))
+    setTimeout(() => { msg.remove() }, 3000)
+}
 
 const postData = () => {
     const body = JSON.stringify({
@@ -63,6 +74,7 @@ const postData = () => {
     })
     .then(res => {
         console.log(res)
+        displaySubmitMessage(res.ok)
         return res.json()
     })
     .then(data => {

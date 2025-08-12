@@ -80,6 +80,7 @@ class Job{
         new Job("Bar", 400, false)
         new Job("Host", 400, false)
         new Job("CH", 175, false)
+        new Job("SA", 175, false)
         new Job("BBK", 175, false)
         new Job("Busser", 150, false)
     }

@@ -343,7 +343,8 @@ label.checkbox.checked{
     font-size: 120%;
     color: white;
 }
-#confirmForm h1 {
+#confirmForm h1,
+#submitMessage {
     box-sizing: border-box;
     text-align: center;
     width: 100%;
